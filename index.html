@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Open File Chess</title>
+<meta name="description" content="Learn chess openings for free. Pick an opening, play each move, and get told right away if it's the book move.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<!-- app:start -->
+<main class="page">
+  <header class="masthead">
+    <h1><a class="home-link" href="#">Open <span class="file">File</span></a></h1>
+    <p>Learn chess openings move by move. Free, no account.</p>
+    <nav class="nav"><a href="#" class="nav-link">Openings</a><a href="play.html" class="nav-link" id="free-board-link">Free board</a></nav>
+  </header>
+
+  <!-- Opening picker -->
+  <section id="view-home" class="home">
+    <div class="search">
+      <label class="status-label" for="search">Find an opening</label>
+      <input id="search" type="search" placeholder="Name, ECO code or moves: Sicilian, C50, e4 c6" autocomplete="off" spellcheck="false">
+    </div>
+    <div id="search-results" class="results" hidden></div>
+
+    <div id="home-browse" class="browse">
+      <section>
+        <h2 class="section-title">Good places to start</h2>
+        <div class="starters" id="starters"></div>
+      </section>
+      <section>
+        <h2 class="section-title">Every opening, A to Z <span class="count" id="total-count"></span></h2>
+        <div class="families" id="families"></div>
+      </section>
+    </div>
+  </section>
+
+  <!-- Trainer -->
+  <section id="view-train" class="study" hidden>
+    <div class="board-wrap">
+      <div id="board"></div>
+      <div class="line-moves" id="line-moves" aria-label="Moves played in this line"></div>
+    </div>
+
+    <aside class="panel" aria-label="Training panel">
+      <div class="opening-head">
+        <span class="eco" id="t-eco"></span>
+        <h2 class="opening-name" id="t-family"></h2>
+        <p class="opening-variation" id="t-variation"></p>
+      </div>
+
+      <div class="side-toggle" role="group" aria-label="Side you play">
+        <span class="status-label">You play</span>
+        <button class="seg" type="button" id="side-w"><span class="turn-chip w"></span>White</button>
+        <button class="seg" type="button" id="side-b"><span class="turn-chip b"></span>Black</button>
+      </div>
+
+      <div class="feedback" id="feedback" aria-live="polite">
+        <span class="feedback-title" id="fb-title">Your move</span>
+        <span class="feedback-body" id="fb-body"></span>
+      </div>
+
+      <div class="controls">
+        <button class="btn" id="btn-hint" type="button">Hint<kbd>H</kbd></button>
+        <button class="btn" id="btn-restart" type="button">Restart line<kbd>R</kbd></button>
+        <button class="btn btn-primary" id="btn-next" type="button">Next line<kbd>N</kbd></button>
+      </div>
+
+      <div class="lines-block">
+        <div class="moves-head">
+          <span class="status-label">Lines</span>
+          <span class="progress-text" id="progress-text"></span>
+        </div>
+        <div class="progress"><span id="progress-bar"></span></div>
+        <ol class="lines" id="lines"></ol>
+      </div>
+
+      <div class="children-block" id="children-block" hidden>
+        <span class="status-label">Narrow it down</span>
+        <div class="chips" id="children"></div>
+      </div>
+    </aside>
+  </section>
+
+  <p class="footnote">Opening names and moves come from the <a href="https://github.com/lichess-org/chess-openings">lichess chess-openings</a> list, which is public domain. Your progress is saved in this browser only.</p>
+</main>
+<!-- app:end -->
+<script src="data/openings.js"></script>
+<script src="js/chess-engine.js"></script>
+<script src="js/pieces.js"></script>
+<script src="js/board.js"></script>
+<script src="js/repertoire.js"></script>
+<script src="js/trainer.js"></script>
+</body>
+</html>
