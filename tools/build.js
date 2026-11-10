@@ -9,7 +9,7 @@ const index = read('index.html').replace(/<a href="play.html"[^>]*>Free board<\/
 const body = index.split('<!-- app:start -->')[1].split('<!-- app:end -->')[0].trim();
 const fonts = index.match(/<link rel="stylesheet" href="https:\/\/fonts[^>]+>/)[0];
 const css = read('css/style.css');
-const js = ['data/openings.js', 'js/chess-engine.js', 'js/pieces.js', 'js/board.js', 'js/repertoire.js', 'js/trainer.js'].map(read).join('\n');
+const js = ['data/openings.js', 'data/tags.js', 'js/chess-engine.js', 'js/pieces.js', 'js/board.js', 'js/repertoire.js', 'js/trainer.js'].map(read).join('\n');
 const head = `<title>Open File Chess</title>\n${fonts}\n<style>\n${css}</style>`;
 const scripts = `<script>\n${js}</script>`;
 fs.mkdirSync(path.join(root, 'dist'), { recursive: true });

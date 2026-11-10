@@ -24,6 +24,9 @@
   var FILES = 'abcdefgh';
   var PROMO_ORDER = ['q', 'n', 'r', 'b'];
 
+  var CHECK_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 12.5l4.2 4.2L18.5 8"/></svg>';
+  var CROSS_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"/></svg>';
+
   function parsePlacement(fen) {
     var out = {};
     var rows = fen.split(' ')[0].split('/');
@@ -77,6 +80,7 @@
     root.style.setProperty('--anim', (prefersReducedMotion() ? 0 : this.animationMs) + 'ms');
     this.squaresEl = el('div', 'board-squares', root);
     this.piecesEl = el('div', 'board-pieces', root);
+    this.badgesEl = el('div', 'board-badges', root);
     this.promoEl = el('div', 'board-promo', root);
     this.promoEl.hidden = true;
     this.squareEls = {};
@@ -105,7 +109,9 @@
       var label = '';
       if (xy[0] === 0) label += '<span class="coord coord-rank">' + name[1] + '</span>';
       if (xy[1] === 7) label += '<span class="coord coord-file">' + name[0] + '</span>';
-      sq.innerHTML = label;
+      var marks = sq.querySelectorAll('.coord');
+      for (var i = 0; i < marks.length; i++) marks[i].remove();
+      sq.insertAdjacentHTML('afterbegin', label);
     }
   };
 
@@ -148,6 +154,31 @@
   P.flip = function () { this.setOrientation(this.orientation === 'w' ? 'b' : 'w'); };
 
   P.setMarks = function (marks) { this.marks = marks || {}; this._renderHighlights(); };
+
+  /*
+   * Pops a check mark ('good') or a cross ('bad') on a square, with a tint behind
+   * it, holds for `ms`, then fades out and removes itself.
+   */
+  P.flashBadge = function (sq, kind, ms) {
+    var hold = ms != null ? ms : 900;
+    var xy = this._xy(sq);
+    // The tint sits on the square, under the pieces; the mark sits above them.
+    var tint = el('div', 'sq-flash flash-' + kind, this.squareEls[sq]);
+    var b = el('div', 'board-badge badge-' + kind, this.badgesEl);
+    b.style.left = (xy[0] * 12.5) + '%';
+    b.style.top = (xy[1] * 12.5) + '%';
+    tint.style.setProperty('--hold', hold + 'ms');
+    b.style.setProperty('--hold', hold + 'ms');
+    b.innerHTML = '<span class="badge-mark">' + (kind === 'good' ? CHECK_ICON : CROSS_ICON) + '</span>';
+    setTimeout(function () { b.remove(); tint.remove(); }, hold + 700);
+    return b;
+  };
+
+  P.clearBadges = function () {
+    this.badgesEl.innerHTML = '';
+    var old = this.squaresEl.querySelectorAll('.sq-flash');
+    for (var i = 0; i < old.length; i++) old[i].remove();
+  };
 
   /* ---------- position diff and animation ---------- */
 
@@ -405,6 +436,25 @@
       this.selected = null;
       this._renderHighlights();
     }
+  };
+
+  /*
+   * A small, static diagram of a position as an SVG string. Pieces come from the
+   * shared sprite (OpenFilePieces.mountSprite), so hundreds of these stay cheap.
+   */
+  var darkPath = '';
+  for (var dy = 0; dy < 8; dy++) for (var dx = 0; dx < 8; dx++) if ((dx + dy) % 2 === 1) darkPath += 'M' + dx + ' ' + dy + 'h1v1h-1z';
+
+  BoardView.mini = function (fen, orientation) {
+    var pos = parsePlacement(fen), out = '';
+    for (var sq in pos) {
+      var f = FILES.indexOf(sq[0]), r = Number(sq[1]);
+      var x = orientation === 'b' ? 7 - f : f, y = orientation === 'b' ? r - 1 : 8 - r;
+      var p = pos[sq], color = p === p.toUpperCase() ? 'w' : 'b';
+      out += '<use href="#ofp-' + color + p.toLowerCase() + '" x="' + (x + 0.04) + '" y="' + (y + 0.04) + '" width="0.92" height="0.92"/>';
+    }
+    return '<svg class="mini-board" viewBox="0 0 8 8" aria-hidden="true"><rect class="mini-light" width="8" height="8"/>' +
+      '<path class="mini-dark" d="' + darkPath + '"/>' + out + '</svg>';
   };
 
   root.BoardView = BoardView;

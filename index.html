@@ -14,82 +14,140 @@
 <!-- app:start -->
 <main class="page">
   <header class="masthead">
-    <h1><a class="home-link" href="#">Open <span class="file">File</span></a></h1>
-    <p>Learn chess openings move by move. Free, no account.</p>
-    <nav class="nav"><a href="#" class="nav-link">Openings</a><a href="play.html" class="nav-link" id="free-board-link">Free board</a></nav>
+    <a class="brand" href="#" aria-label="Open File, all openings">
+      <svg class="brand-mark" viewBox="0 0 24 24" aria-hidden="true"><rect class="bm-bg" width="24" height="24"/><path class="bm-sq" d="M0 0h8v8H0zM0 16h8v8H0zM16 8h8v8h-8z"/><rect class="bm-file" x="8" width="8" height="24"/></svg>
+      <span class="brand-name">Open <span class="file">File</span></span>
+    </a>
+    <nav class="nav" aria-label="Pages"><a href="#" class="nav-link is-current">Openings</a><a href="play.html" class="nav-link" id="free-board-link">Free board</a></nav>
   </header>
 
   <!-- Opening picker -->
   <section id="view-home" class="home">
-    <div class="search">
-      <label class="status-label" for="search">Find an opening</label>
-      <input id="search" type="search" placeholder="Name, ECO code or moves: Sicilian, C50, e4 c6" autocomplete="off" spellcheck="false">
+    <div class="intro">
+      <h1>Learn an opening by <em>playing</em> it.</h1>
+      <p>Pick an opening and play its moves from memory. Each move gets a check or a cross right away, and once the core moves stick you work through the side lines.</p>
+      <div class="intro-stats" id="intro-stats"></div>
     </div>
-    <div id="search-results" class="results" hidden></div>
 
-    <div id="home-browse" class="browse">
-      <section>
-        <h2 class="section-title">Good places to start</h2>
-        <div class="starters" id="starters"></div>
-      </section>
-      <section>
-        <h2 class="section-title">Every opening, A to Z <span class="count" id="total-count"></span></h2>
-        <div class="families" id="families"></div>
-      </section>
+    <section class="section" id="continue" hidden>
+      <h2 class="section-title">Pick up where you left off</h2>
+      <div class="cards" id="continue-cards"></div>
+    </section>
+
+    <div class="finder" role="search">
+      <div class="finder-search">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5L21 21"/></svg>
+        <label class="sr-only" for="search">Search openings</label>
+        <input id="search" type="search" placeholder="Search by name, ECO code or moves: Sicilian, C50, e4 c6" autocomplete="off" spellcheck="false">
+      </div>
+      <div class="finder-row">
+        <div class="filter-group">
+          <span class="eyebrow" id="lbl-side">Play as</span>
+          <div class="seg" role="group" aria-labelledby="lbl-side" id="f-side">
+            <button type="button" data-v="" aria-pressed="true">Any</button>
+            <button type="button" data-v="w" aria-pressed="false"><span class="turn-chip w"></span>White</button>
+            <button type="button" data-v="b" aria-pressed="false"><span class="turn-chip b"></span>Black</button>
+          </div>
+        </div>
+        <div class="filter-group">
+          <span class="eyebrow" id="lbl-first">White's first move</span>
+          <div class="seg" role="group" aria-labelledby="lbl-first" id="f-first">
+            <button type="button" data-v="" aria-pressed="true">Any</button>
+            <button type="button" data-v="e4" aria-pressed="false"><span class="mv">1.e4</span></button>
+            <button type="button" data-v="d4" aria-pressed="false"><span class="mv">1.d4</span></button>
+            <button type="button" data-v="c4" aria-pressed="false"><span class="mv">1.c4</span></button>
+            <button type="button" data-v="Nf3" aria-pressed="false"><span class="mv">1.Nf3</span></button>
+            <button type="button" data-v="other" aria-pressed="false">Other</button>
+          </div>
+        </div>
+      </div>
+      <div class="filter-group">
+        <span class="eyebrow" id="lbl-tags">Character</span>
+        <div class="chips" role="group" aria-labelledby="lbl-tags" id="f-tags"></div>
+      </div>
+      <p class="filter-note" id="filter-note">Sound, Trappy and the other labels are a rough guide based on each opening's reputation.</p>
     </div>
+
+    <div class="results-head">
+      <p id="result-summary" aria-live="polite"></p>
+      <button class="link-btn" id="clear-filters" type="button" hidden>Clear filters</button>
+    </div>
+
+    <section class="section" id="group-openings">
+      <h2 class="section-title" id="openings-title">All openings</h2>
+      <div class="cards" id="openings"></div>
+    </section>
+
+    <section class="section" id="group-lines" hidden>
+      <h2 class="section-title" id="lines-title"></h2>
+      <p class="section-note" id="lines-note"></p>
+      <div class="groups" id="line-groups"></div>
+      <div class="more-row"><button class="btn" id="more-groups" type="button" hidden></button></div>
+    </section>
+
+    <p class="empty" id="no-results" hidden></p>
   </section>
 
   <!-- Trainer -->
-  <section id="view-train" class="study" hidden>
-    <div class="board-wrap">
-      <div id="board"></div>
-      <div class="line-moves" id="line-moves" aria-label="Moves played in this line"></div>
-    </div>
-
-    <aside class="panel" aria-label="Training panel">
-      <div class="opening-head">
-        <span class="eco" id="t-eco"></span>
-        <h2 class="opening-name" id="t-family"></h2>
-        <p class="opening-variation" id="t-variation"></p>
+  <section id="view-train" class="train" hidden>
+    <a class="back" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>All openings</a>
+    <div class="study">
+      <div class="board-wrap">
+        <div id="board"></div>
+        <div class="line-moves" id="line-moves" aria-label="Moves played in this line"></div>
       </div>
 
-      <div class="side-toggle" role="group" aria-label="Side you play">
-        <span class="status-label">You play</span>
-        <button class="seg" type="button" id="side-w"><span class="turn-chip w"></span>White</button>
-        <button class="seg" type="button" id="side-b"><span class="turn-chip b"></span>Black</button>
-      </div>
-
-      <div class="feedback" id="feedback" aria-live="polite">
-        <span class="feedback-title" id="fb-title">Your move</span>
-        <span class="feedback-body" id="fb-body"></span>
-      </div>
-
-      <div class="controls">
-        <button class="btn" id="btn-hint" type="button">Hint<kbd>H</kbd></button>
-        <button class="btn" id="btn-restart" type="button">Restart line<kbd>R</kbd></button>
-        <button class="btn btn-primary" id="btn-next" type="button">Next line<kbd>N</kbd></button>
-      </div>
-
-      <div class="lines-block">
-        <div class="moves-head">
-          <span class="status-label">Lines</span>
-          <span class="progress-text" id="progress-text"></span>
+      <aside class="panel" aria-label="Training panel">
+        <div class="opening-head">
+          <div class="opening-eco"><span class="eco" id="t-eco"></span><span class="tags" id="t-tags"></span></div>
+          <h1 class="opening-name" id="t-family"></h1>
+          <p class="opening-variation" id="t-variation"></p>
         </div>
-        <div class="progress"><span id="progress-bar"></span></div>
-        <ol class="lines" id="lines"></ol>
-      </div>
 
-      <div class="children-block" id="children-block" hidden>
-        <span class="status-label">Narrow it down</span>
-        <div class="chips" id="children"></div>
-      </div>
-    </aside>
+        <div class="feedback" id="feedback" aria-live="polite">
+          <span class="fb-icon" id="fb-icon"></span>
+          <span class="fb-text">
+            <span class="feedback-title" id="fb-title">Your move</span>
+            <span class="feedback-body" id="fb-body"></span>
+          </span>
+        </div>
+
+        <div class="controls">
+          <button class="btn" id="btn-hint" type="button">Hint<kbd>H</kbd></button>
+          <button class="btn" id="btn-restart" type="button">Restart line<kbd>R</kbd></button>
+          <button class="btn btn-primary" id="btn-next" type="button">Next line<kbd>N</kbd></button>
+        </div>
+
+        <div class="side-toggle">
+          <span class="eyebrow" id="lbl-you">You play</span>
+          <div class="seg" role="group" aria-labelledby="lbl-you">
+            <button type="button" id="side-w" aria-pressed="false"><span class="turn-chip w"></span>White</button>
+            <button type="button" id="side-b" aria-pressed="false"><span class="turn-chip b"></span>Black</button>
+          </div>
+        </div>
+
+        <div class="lines-block">
+          <div class="moves-head">
+            <span class="eyebrow">Lines</span>
+            <span class="progress-text" id="progress-text"></span>
+          </div>
+          <div class="progress"><span id="progress-bar"></span></div>
+          <ol class="lines" id="lines"></ol>
+        </div>
+
+        <div class="children-block" id="children-block" hidden>
+          <span class="eyebrow">Narrow it down</span>
+          <div class="chips" id="children"></div>
+        </div>
+      </aside>
+    </div>
   </section>
 
   <p class="footnote">Opening names and moves come from the <a href="https://github.com/lichess-org/chess-openings">lichess chess-openings</a> list, which is public domain. Your progress is saved in this browser only.</p>
 </main>
 <!-- app:end -->
 <script src="data/openings.js"></script>
+<script src="data/tags.js"></script>
 <script src="js/chess-engine.js"></script>
 <script src="js/pieces.js"></script>
 <script src="js/board.js"></script>

@@ -13,10 +13,17 @@
 <!-- app:start -->
 <main class="page">
   <header class="masthead">
-    <h1><a class="home-link" href="index.html">Open <span class="file">File</span></a></h1>
-    <p>A free board. Play both sides to try out a line.</p>
-    <nav class="nav"><a href="index.html" class="nav-link">Openings</a><a href="play.html" class="nav-link">Free board</a></nav>
+    <a class="brand" href="index.html" aria-label="Open File, all openings">
+      <svg class="brand-mark" viewBox="0 0 24 24" aria-hidden="true"><rect class="bm-bg" width="24" height="24"/><path class="bm-sq" d="M0 0h8v8H0zM0 16h8v8H0zM16 8h8v8h-8z"/><rect class="bm-file" x="8" width="8" height="24"/></svg>
+      <span class="brand-name">Open <span class="file">File</span></span>
+    </a>
+    <nav class="nav" aria-label="Pages"><a href="index.html" class="nav-link">Openings</a><a href="play.html" class="nav-link is-current">Free board</a></nav>
   </header>
+
+  <div class="play-intro">
+    <h1>Free board</h1>
+    <p>Play both sides to try out a line. Every rule is checked.</p>
+  </div>
 
   <section class="study">
     <div class="board-wrap">
@@ -25,7 +32,7 @@
 
     <aside class="panel" aria-label="Game panel">
       <div class="status" id="status" aria-live="polite">
-        <span class="status-label">Position</span>
+        <span class="eyebrow">Position</span>
         <span class="status-text"><span class="turn-chip w" id="turn-chip"></span><span id="status-text">White to move</span></span>
       </div>
 
@@ -37,7 +44,7 @@
 
       <div>
         <div class="moves-head">
-          <span class="status-label">Moves</span>
+          <span class="eyebrow">Moves</span>
           <button class="btn" id="btn-copy" type="button" hidden>Copy moves</button>
         </div>
         <div class="moves-wrap" id="moves-wrap">

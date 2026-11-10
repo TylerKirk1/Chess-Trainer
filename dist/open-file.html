@@ -6,50 +6,74 @@
 <title>Open File Chess</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=JetBrains+Mono:wght@500;700&display=swap">
 <style>
-/* Layout: board as the hero on the left, a narrow study panel on the right; stacks on phones. */
+/* Layout: the board is the hero. The picker is a catalog of small boards; the trainer
+   puts the live board left and a narrow coaching panel right. Both stack on phones. */
 :root {
   --bg: #eceff1;
   --surface: #ffffff;
-  --fg: #18222b;
+  --surface-2: #f3f5f7;
+  --fg: #15202a;
   --muted: #5a6975;
-  --line: #d3dade;
-  --accent: #2b6a86;
+  --line: #d4dbe0;
+  --accent: #1f6a8a;
+  --accent-soft: rgba(31, 106, 138, 0.1);
+  --on-accent: #ffffff;
+  --ok: #1f8656;
+  --ok-soft: rgba(31, 134, 86, 0.11);
+  --bad: #c9432f;
+  --bad-soft: rgba(201, 67, 47, 0.1);
   --sq-light: #dfe5e8;
   --sq-dark: #7f97a7;
   --coord-on-light: #6c8495;
   --coord-on-dark: #eef2f4;
   --last: rgba(232, 176, 52, 0.48);
-  --selected: rgba(43, 106, 134, 0.42);
-  --dot: rgba(24, 34, 43, 0.28);
+  --selected: rgba(31, 106, 138, 0.42);
+  --dot: rgba(21, 32, 42, 0.28);
   --check: #d64b3c;
-  --good: rgba(66, 160, 98, 0.5);
-  --bad: rgba(214, 75, 60, 0.45);
-  --hint: rgba(43, 106, 134, 0.35);
-  --ok: #2f8a55;
-  --ok-soft: rgba(47, 138, 85, 0.1);
+  --good: rgba(52, 168, 104, 0.42);
+  --bad-tint: rgba(214, 75, 60, 0.4);
+  --hint: rgba(31, 106, 138, 0.38);
+  --badge-ok: #1f9d63;
+  --badge-bad: #d6402f;
+  --on-badge: #ffffff;
   --pc-w-fill: #fbfbf8;
   --pc-w-line: #1b2228;
   --pc-b-fill: #262c33;
   --pc-b-line: #0d1013;
   --pc-b-detail: #c9d3da;
+  --tag-sound: #1f8656;
+  --tag-beginner: #2a68ad;
+  --tag-trappy: #c2452f;
+  --tag-gambit: #a86a10;
+  --tag-offbeat: #7450b3;
+  --tag-started: #5a6975;
+  --shadow: 0 1px 2px rgba(16, 28, 38, 0.06), 0 8px 24px -12px rgba(16, 28, 38, 0.25);
   --font-display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
   --font-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, -apple-system, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #11171c; --surface: #19222a; --fg: #e5ebee; --muted: #93a3ae; --line: #2b3842;
-    --accent: #7fb6d0; --sq-light: #b7c4cc; --sq-dark: #5a7385;
-    --coord-on-light: #4e6575; --coord-on-dark: #dfe7ec;
-    --dot: rgba(13, 18, 22, 0.38); --selected: rgba(127, 182, 208, 0.5); --ok: #5cc48a; --ok-soft: rgba(92, 196, 138, 0.12);
+    --bg: #0f151a; --surface: #172027; --surface-2: #1e2932; --fg: #e6ecef; --muted: #93a3ae; --line: #2a3742;
+    --accent: #7dbbd6; --accent-soft: rgba(125, 187, 214, 0.13); --on-accent: #0c161c;
+    --ok: #5cc48a; --ok-soft: rgba(92, 196, 138, 0.13); --bad: #f0806c; --bad-soft: rgba(240, 128, 108, 0.13);
+    --sq-light: #b7c4cc; --sq-dark: #5a7385; --coord-on-light: #4e6575; --coord-on-dark: #dfe7ec;
+    --dot: rgba(13, 18, 22, 0.38); --selected: rgba(125, 187, 214, 0.5); --hint: rgba(125, 187, 214, 0.45);
+    --tag-sound: #5cc48a; --tag-beginner: #7fb2ea; --tag-trappy: #f0806c; --tag-gambit: #e0ad55;
+    --tag-offbeat: #b39be0; --tag-started: #93a3ae;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 10px 28px -14px rgba(0, 0, 0, 0.7);
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #11171c; --surface: #19222a; --fg: #e5ebee; --muted: #93a3ae; --line: #2b3842;
-  --accent: #7fb6d0; --sq-light: #b7c4cc; --sq-dark: #5a7385;
-  --coord-on-light: #4e6575; --coord-on-dark: #dfe7ec;
-  --dot: rgba(13, 18, 22, 0.38); --selected: rgba(127, 182, 208, 0.5); --ok: #5cc48a; --ok-soft: rgba(92, 196, 138, 0.12);
+  --bg: #0f151a; --surface: #172027; --surface-2: #1e2932; --fg: #e6ecef; --muted: #93a3ae; --line: #2a3742;
+  --accent: #7dbbd6; --accent-soft: rgba(125, 187, 214, 0.13); --on-accent: #0c161c;
+  --ok: #5cc48a; --ok-soft: rgba(92, 196, 138, 0.13); --bad: #f0806c; --bad-soft: rgba(240, 128, 108, 0.13);
+  --sq-light: #b7c4cc; --sq-dark: #5a7385; --coord-on-light: #4e6575; --coord-on-dark: #dfe7ec;
+  --dot: rgba(13, 18, 22, 0.38); --selected: rgba(125, 187, 214, 0.5); --hint: rgba(125, 187, 214, 0.45);
+  --tag-sound: #5cc48a; --tag-beginner: #7fb2ea; --tag-trappy: #f0806c; --tag-gambit: #e0ad55;
+  --tag-offbeat: #b39be0; --tag-started: #93a3ae;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 10px 28px -14px rgba(0, 0, 0, 0.7);
   color-scheme: dark;
 }
 
@@ -61,48 +85,246 @@ body {
   background: var(--bg);
   color: var(--fg);
   font: 16px/1.5 var(--font-body);
+  -webkit-font-smoothing: antialiased;
 }
+a { color: var(--accent); }
+button { font: inherit; color: inherit; }
+h1, h2, h3, p { margin: 0; }
 
 .page {
-  max-width: 1080px;
+  max-width: 1120px;
   margin: 0 auto;
-  padding-block: 28px 40px;
+  padding-block: 20px 48px;
   padding-left: max(16px, env(safe-area-inset-left, 0px));
   padding-right: max(16px, env(safe-area-inset-right, 0px));
   display: grid;
-  gap: 24px;
+  gap: 28px;
 }
 
-.masthead { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 16px; }
-.masthead h1 {
-  margin: 0;
-  font: 700 clamp(1.7rem, 3.6vw, 2.3rem)/1.1 var(--font-display);
-  letter-spacing: -0.02em;
+.eyebrow, .status-label {
+  font: 700 0.7rem/1.2 var(--font-body);
+  text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--muted);
+}
+.sr-only {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+/* ---------- masthead ---------- */
+.masthead {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--line);
+}
+.brand { display: inline-flex; align-items: center; gap: 10px; color: var(--fg); text-decoration: none; }
+.brand-mark { width: 26px; height: 26px; border-radius: 6px; flex: none; }
+.brand-mark .bm-bg { fill: var(--sq-light); }
+.brand-mark .bm-sq { fill: var(--sq-dark); }
+.brand-mark .bm-file { fill: var(--accent); }
+.brand-name { font: 700 1.3rem/1 var(--font-display); letter-spacing: -0.02em; }
+.brand-name .file { color: var(--accent); }
+.brand:focus-visible, .nav-link:focus-visible, .back:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+.nav { display: flex; gap: 2px; }
+.nav-link {
+  font: 700 0.9rem/1 var(--font-body);
+  color: var(--muted); text-decoration: none;
+  padding: 9px 12px; border-radius: 7px;
+}
+.nav-link:hover { color: var(--fg); background: var(--surface); }
+.nav-link.is-current { color: var(--fg); background: var(--surface); box-shadow: inset 0 0 0 1px var(--line); }
+
+/* ---------- picker: intro ---------- */
+.home { display: grid; gap: 28px; min-width: 0; }
+.intro { display: grid; gap: 10px; padding-top: 8px; }
+.intro h1 {
+  font: 700 clamp(1.9rem, 5vw, 3.1rem)/1.04 var(--font-display);
+  letter-spacing: -0.03em;
   text-wrap: balance;
+  max-width: 18ch;
 }
-.masthead h1 .file { color: var(--accent); }
-.masthead p { margin: 0; color: var(--muted); }
+.intro h1 em { font-style: normal; color: var(--accent); }
+.intro p { color: var(--muted); max-width: 62ch; font-size: 1.05rem; }
+.intro-stats { display: flex; flex-wrap: wrap; gap: 6px 22px; padding-top: 4px; font: 500 0.82rem/1.3 var(--font-mono); color: var(--muted); }
+.intro-stats b { color: var(--fg); font-weight: 700; }
 
+/* ---------- picker: filters ---------- */
+.finder {
+  display: grid; gap: 16px;
+  padding: 16px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+.finder-search { position: relative; }
+.finder-search svg {
+  position: absolute; left: 14px; top: 50%; width: 18px; height: 18px; margin-top: -9px;
+  fill: none; stroke: var(--muted); stroke-width: 2; stroke-linecap: round; pointer-events: none;
+}
+#search {
+  font: 500 1.02rem/1.2 var(--font-body);
+  color: var(--fg); background: var(--surface-2);
+  border: 1px solid transparent; border-radius: 9px;
+  padding: 13px 14px 13px 42px; width: 100%;
+}
+#search::placeholder { color: var(--muted); }
+#search:focus { outline: 2px solid var(--accent); outline-offset: 0; background: var(--surface); }
+.finder-row { display: flex; flex-wrap: wrap; gap: 14px 28px; }
+.filter-group { display: grid; gap: 7px; min-width: 0; }
+
+.seg {
+  display: inline-flex; flex-wrap: wrap; gap: 2px;
+  padding: 3px;
+  background: var(--surface-2);
+  border-radius: 9px;
+}
+.seg button {
+  display: inline-flex; align-items: center; gap: 7px;
+  font: 700 0.88rem/1 var(--font-body);
+  color: var(--muted);
+  background: transparent; border: 0; border-radius: 7px;
+  padding: 8px 12px; cursor: pointer;
+}
+.seg button:hover { color: var(--fg); }
+.seg button[aria-pressed="true"] { color: var(--fg); background: var(--surface); box-shadow: 0 0 0 1px var(--line), 0 1px 2px rgba(16, 28, 38, 0.12); }
+.seg button:focus-visible, .chip:focus-visible, .link-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.seg .mv { font-family: var(--font-mono); font-weight: 700; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip {
+  --c: var(--muted);
+  display: inline-flex; align-items: center; gap: 7px;
+  font: 700 0.86rem/1.2 var(--font-body);
+  color: var(--fg); text-decoration: none;
+  background: var(--surface);
+  border: 1px solid var(--line); border-radius: 999px;
+  padding: 7px 12px; cursor: pointer;
+}
+.chip::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--c); flex: none; }
+.chip:hover { border-color: var(--c); }
+.chip[aria-pressed="true"] { border-color: var(--c); box-shadow: inset 0 0 0 1px var(--c); background: var(--surface-2); }
+.chip[data-tag="sound"] { --c: var(--tag-sound); }
+.chip[data-tag="beginner"] { --c: var(--tag-beginner); }
+.chip[data-tag="trappy"] { --c: var(--tag-trappy); }
+.chip[data-tag="gambit"] { --c: var(--tag-gambit); }
+.chip[data-tag="offbeat"] { --c: var(--tag-offbeat); }
+.chip[data-tag="started"] { --c: var(--tag-started); }
+a.chip::before { display: none; }
+a.chip:hover { border-color: var(--accent); }
+.filter-note { color: var(--muted); font-size: 0.84rem; max-width: 70ch; }
+
+.results-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 16px; }
+.results-head p { color: var(--muted); font: 500 0.86rem/1.4 var(--font-mono); }
+.link-btn {
+  background: none; border: 0; padding: 2px 0; cursor: pointer;
+  font: 700 0.88rem/1.3 var(--font-body); color: var(--accent);
+  text-decoration: underline; text-underline-offset: 3px;
+}
+
+/* ---------- picker: opening cards ---------- */
+.section { display: grid; gap: 14px; min-width: 0; }
+.section-title { font: 700 1.3rem/1.2 var(--font-display); letter-spacing: -0.01em; }
+.section-note { color: var(--muted); font-size: 0.92rem; max-width: 70ch; margin-top: -8px; }
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(296px, 1fr)); gap: 12px; }
+.card {
+  display: grid; grid-template-columns: 104px minmax(0, 1fr); gap: 14px; align-items: start;
+  padding: 12px;
+  background: var(--surface);
+  border: 1px solid var(--line); border-radius: 12px;
+  color: var(--fg); text-decoration: none;
+  transition: border-color 120ms ease, box-shadow 120ms ease, transform 120ms ease;
+}
+.card:hover { border-color: var(--accent); box-shadow: var(--shadow); transform: translateY(-1px); }
+.card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.card-board { display: block; border-radius: 5px; overflow: hidden; line-height: 0; box-shadow: 0 0 0 1px var(--line); }
+.mini-board { display: block; width: 100%; height: auto; aspect-ratio: 1 / 1; }
+.mini-light { fill: var(--sq-light); }
+.mini-dark { fill: var(--sq-dark); }
+.card-body { display: grid; gap: 5px; align-content: start; min-width: 0; padding-top: 1px; }
+.card-name { font: 700 1.06rem/1.2 var(--font-display); letter-spacing: -0.005em; overflow-wrap: anywhere; }
+.card-sub { font-weight: 700; font-size: 0.86rem; color: var(--muted); line-height: 1.25; }
+.card-moves { font: 500 0.76rem/1.45 var(--font-mono); color: var(--muted); overflow-wrap: anywhere; }
+.card-meta { display: flex; align-items: center; gap: 6px; font-size: 0.82rem; color: var(--muted); }
+.card-meta .turn-chip { width: 11px; height: 11px; border-width: 1.5px; }
+.tags { display: flex; flex-wrap: wrap; gap: 3px 10px; }
+.tag {
+  --c: var(--muted);
+  display: inline-flex; align-items: center; gap: 5px;
+  font: 700 0.66rem/1.3 var(--font-mono);
+  text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--c);
+}
+.tag::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--c); }
+.tag-sound { --c: var(--tag-sound); }
+.tag-beginner { --c: var(--tag-beginner); }
+.tag-trappy { --c: var(--tag-trappy); }
+.tag-gambit { --c: var(--tag-gambit); }
+.tag-offbeat { --c: var(--tag-offbeat); }
+.card-progress { display: grid; gap: 5px; font: 500 0.74rem/1.2 var(--font-mono); color: var(--muted); padding-top: 2px; }
+
+.progress { height: 4px; border-radius: 2px; background: var(--line); overflow: hidden; }
+.progress span { display: block; height: 100%; width: 0; background: var(--ok); transition: width 300ms ease; }
+
+/* lines that match inside other openings */
+.groups { display: grid; grid-template-columns: repeat(auto-fill, minmax(296px, 1fr)); gap: 12px; align-items: start; }
+.group {
+  display: grid; gap: 8px;
+  padding: 14px 14px 10px;
+  background: var(--surface);
+  border: 1px solid var(--line); border-radius: 12px;
+  min-width: 0;
+}
+.group-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; color: var(--fg); text-decoration: none; }
+.group-head:hover .group-name { color: var(--accent); }
+.group-name { font: 700 1.02rem/1.2 var(--font-display); }
+.group-count { font: 500 0.74rem/1.2 var(--font-mono); color: var(--muted); white-space: nowrap; }
+.group-lines { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.group-lines a {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 10px;
+  padding: 7px 6px; margin: 0 -6px;
+  border-radius: 6px;
+  color: var(--fg); text-decoration: none; font-size: 0.92rem;
+}
+.group-lines li + li a { box-shadow: 0 -1px 0 var(--line); }
+.group-lines a:hover, .group-lines a:focus-visible { background: var(--surface-2); outline: none; }
+.gl-name { min-width: 0; overflow-wrap: anywhere; }
+.gl-move { font: 500 0.76rem/1.2 var(--font-mono); color: var(--muted); white-space: nowrap; }
+.group .link-btn { justify-self: start; font-size: 0.82rem; }
+.more-row { display: flex; justify-content: center; }
+.empty {
+  color: var(--muted);
+  padding: 28px 16px; text-align: center;
+  border: 1px dashed var(--line); border-radius: 12px;
+}
+
+/* ---------- trainer ---------- */
+.train { display: grid; gap: 16px; min-width: 0; }
+.back {
+  display: inline-flex; align-items: center; gap: 6px; justify-self: start;
+  font: 700 0.9rem/1 var(--font-body); color: var(--muted); text-decoration: none;
+}
+.back:hover { color: var(--accent); }
+.back svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
 .study {
   display: grid;
-  grid-template-columns: minmax(0, 620px) minmax(240px, 1fr);
+  grid-template-columns: minmax(0, 640px) minmax(260px, 1fr);
   gap: 28px;
   align-items: start;
 }
-@media (max-width: 820px) {
-  .study { grid-template-columns: minmax(0, 1fr); }
+@media (max-width: 860px) {
+  .study { grid-template-columns: minmax(0, 1fr); gap: 20px; }
 }
 
 /* ---------- board ---------- */
-.board-wrap { min-width: 0; }
+.board-wrap { min-width: 0; display: grid; gap: 14px; }
 .board {
   position: relative;
   width: 100%;
   max-width: 100%;
   aspect-ratio: 1 / 1;
-  border-radius: 6px;
+  border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 1px 0 var(--line), 0 18px 40px -24px rgba(16, 28, 38, 0.55);
+  box-shadow: 0 0 0 1px var(--line), 0 22px 44px -26px rgba(16, 28, 38, 0.6);
   touch-action: none;
   user-select: none;
   -webkit-user-select: none;
@@ -121,8 +343,8 @@ body {
 .sq.is-last::before { background: var(--last); }
 .sq.is-selected::before { background: var(--selected); }
 .sq.mark-good::before { background: var(--good); }
-.sq.mark-bad::before { background: var(--bad); }
-.sq.mark-hint::before { background: var(--hint); }
+.sq.mark-bad::before { background: var(--bad-tint); }
+.sq.mark-hint::before { background: var(--hint); box-shadow: inset 0 0 0 3px var(--accent); }
 .sq.is-check::before {
   background: radial-gradient(circle, var(--check) 0%, rgba(214, 75, 60, 0.55) 40%, transparent 72%);
 }
@@ -162,16 +384,40 @@ body {
 .piece.appear { animation: piece-in var(--anim, 200ms) ease-out; }
 @keyframes piece-out { to { opacity: 0; } }
 @keyframes piece-in { from { opacity: 0; } }
-.board.is-movable { cursor: default; }
 
 .pc { display: block; width: 100%; height: 100%; padding: 6%; overflow: visible; transition: transform 120ms ease; }
-.pc * { stroke-width: 3.2; stroke-linejoin: round; stroke-linecap: round; }
+.pc *, .ofp * { stroke-width: 3.2; stroke-linejoin: round; stroke-linecap: round; }
+.ofp * { stroke-width: 4; }
 .pc-w * { fill: var(--pc-w-fill); stroke: var(--pc-w-line); }
 .pc-w .d { fill: var(--pc-w-line); stroke: none; }
 .pc-w .dl { fill: none; stroke: var(--pc-w-line); }
 .pc-b * { fill: var(--pc-b-fill); stroke: var(--pc-b-line); }
 .pc-b .d { fill: var(--pc-b-detail); stroke: none; }
 .pc-b .dl { fill: none; stroke: var(--pc-b-detail); }
+
+/* right and wrong marks: a tint on the square and a round badge in its corner that pops, holds, fades */
+.board-badges { position: absolute; inset: 0; pointer-events: none; z-index: 6; }
+.board-badge {
+  position: absolute; width: 12.5%; height: 12.5%;
+  animation: badge-out 340ms ease-in var(--hold, 900ms) forwards;
+}
+.sq-flash { position: absolute; inset: 0; pointer-events: none; animation: badge-out 340ms ease-in var(--hold, 900ms) forwards; }
+.flash-good { background: var(--good); }
+.flash-bad { background: var(--bad-tint); }
+.badge-mark {
+  position: absolute; top: 5%; right: 5%;
+  width: 46%; height: 46%;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  color: var(--on-badge);
+  box-shadow: 0 0 0 2px var(--on-badge), 0 3px 8px rgba(0, 0, 0, 0.35);
+  animation: badge-pop 260ms cubic-bezier(0.3, 1.7, 0.5, 1) both;
+}
+.badge-good .badge-mark { background: var(--badge-ok); }
+.badge-bad .badge-mark { background: var(--badge-bad); }
+.badge-mark svg { width: 68%; height: 68%; fill: none; stroke: currentColor; stroke-width: 3.4; stroke-linecap: round; stroke-linejoin: round; }
+@keyframes badge-pop { from { transform: scale(0.2); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@keyframes badge-out { to { opacity: 0; } }
 
 .board-promo {
   position: absolute; inset: 0;
@@ -193,6 +439,19 @@ body {
 }
 .promo-btn:hover, .promo-btn:focus-visible { background: var(--hint); outline: none; }
 
+/* the line so far, under the board */
+.line-moves {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 5px 4px;
+  font: 500 0.88rem/1 var(--font-mono);
+  min-height: 28px;
+}
+.lm-num { color: var(--muted); margin-left: 6px; font-size: 0.78rem; }
+.lm-num:first-child { margin-left: 0; }
+.lm { padding: 6px 7px; border-radius: 6px; background: var(--surface); box-shadow: inset 0 0 0 1px var(--line); }
+.lm.is-hidden { color: transparent; background: transparent; box-shadow: inset 0 0 0 1px var(--line); min-width: 2.6ch; }
+.lm.is-next { box-shadow: inset 0 0 0 2px var(--accent); }
+.lm.is-latest { background: var(--accent); color: var(--on-accent); box-shadow: none; font-weight: 700; }
+
 /* ---------- side panel ---------- */
 .panel {
   min-width: 0;
@@ -200,19 +459,66 @@ body {
   gap: 18px;
   background: var(--surface);
   border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 20px;
+}
+.opening-head { display: grid; gap: 6px; }
+.opening-eco { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; }
+.eco { font: 700 0.72rem/1 var(--font-mono); color: var(--muted); letter-spacing: 0.06em; padding: 4px 6px; border-radius: 4px; background: var(--surface-2); }
+.opening-name { font: 700 clamp(1.5rem, 3vw, 1.85rem)/1.08 var(--font-display); letter-spacing: -0.02em; text-wrap: balance; }
+.opening-variation { color: var(--muted); font-weight: 700; }
+.opening-variation.is-moves { font: 500 0.86rem/1.4 var(--font-mono); }
+
+.feedback {
+  display: grid; grid-template-columns: 36px minmax(0, 1fr); gap: 12px; align-items: start;
+  padding: 14px;
+  border-radius: 10px;
+  background: var(--surface-2);
+}
+.fb-icon {
+  width: 36px; height: 36px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--accent); color: var(--on-accent);
+}
+.fb-icon svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.fb-icon.pop { animation: badge-pop 260ms cubic-bezier(0.3, 1.7, 0.5, 1) both; }
+.fb-text { display: grid; gap: 2px; min-width: 0; }
+.feedback-title { font: 700 1.12rem/1.25 var(--font-display); }
+.feedback-body { color: var(--muted); font-size: 0.93rem; min-height: 1.4em; }
+.feedback.is-wait .fb-icon { background: var(--line); color: var(--muted); }
+.feedback.is-good { background: var(--ok-soft); }
+.feedback.is-good .fb-icon, .feedback.is-done .fb-icon { background: var(--badge-ok); color: var(--on-badge); }
+.feedback.is-good .feedback-title, .feedback.is-done .feedback-title { color: var(--ok); }
+.feedback.is-bad { background: var(--bad-soft); }
+.feedback.is-bad .fb-icon { background: var(--badge-bad); color: var(--on-badge); }
+.feedback.is-bad .feedback-title { color: var(--bad); }
+.feedback.is-done { background: var(--ok-soft); box-shadow: inset 0 0 0 1px var(--ok); }
+
+.controls { display: flex; flex-wrap: wrap; gap: 8px; }
+.btn {
+  display: inline-flex; align-items: center;
+  font: 700 0.9rem/1 var(--font-body);
+  color: var(--fg);
+  background: var(--surface);
+  border: 1px solid var(--line);
   border-radius: 8px;
-  padding: 18px;
+  padding: 10px 14px;
+  cursor: pointer;
 }
-.status { display: grid; gap: 2px; }
-.status-label {
-  font: 600 0.72rem/1.2 var(--font-body);
-  text-transform: uppercase; letter-spacing: 0.09em;
-  color: var(--muted);
+.btn:hover { border-color: var(--accent); }
+.btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.btn:disabled { opacity: 0.45; cursor: default; border-color: var(--line); }
+.btn-primary { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+.btn-primary.is-ready { animation: ready 1.4s ease-out 2; }
+@keyframes ready { 0% { box-shadow: 0 0 0 0 var(--accent); } 100% { box-shadow: 0 0 0 10px transparent; } }
+kbd {
+  font: 500 0.74em/1 var(--font-mono);
+  padding: 2px 5px; margin-left: 7px;
+  border: 1px solid currentColor; border-radius: 4px; opacity: 0.55;
 }
-.status-text {
-  display: flex; align-items: center; gap: 10px;
-  font: 600 1.25rem/1.3 var(--font-display);
-}
+@media (hover: none) { kbd { display: none; } }
+
+.side-toggle { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 12px; }
 .turn-chip {
   display: inline-block;
   width: 16px; height: 16px; border-radius: 50%;
@@ -221,34 +527,51 @@ body {
 }
 .turn-chip.w { background: var(--pc-w-fill); }
 .turn-chip.b { background: var(--pc-b-fill); }
-.status.is-over .status-text { color: var(--accent); }
-.status.is-check .status-text { color: var(--check); }
+.seg .turn-chip { width: 11px; height: 11px; border-width: 1.5px; }
 
-.controls { display: flex; flex-wrap: wrap; gap: 8px; }
-.btn {
-  font: 600 0.92rem/1 var(--font-body);
-  color: var(--fg);
-  background: var(--bg);
-  border: 1px solid var(--line);
-  border-radius: 6px;
-  padding: 10px 14px;
-  cursor: pointer;
-}
-.btn:hover { border-color: var(--accent); }
-.btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.btn:disabled { opacity: 0.45; cursor: default; border-color: var(--line); }
-.btn-primary { background: var(--accent); color: var(--surface); border-color: var(--accent); }
-kbd {
-  font: 500 0.75em/1 var(--font-mono);
-  padding: 2px 5px; margin-left: 6px;
-  border: 1px solid currentColor; border-radius: 3px; opacity: 0.6;
-}
-
+.lines-block { display: grid; gap: 8px; min-width: 0; }
 .moves-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.progress-text { font: 500 0.78rem/1 var(--font-mono); color: var(--muted); }
+.lines {
+  position: relative;
+  list-style: none; margin: 0; padding: 0;
+  max-height: 296px; overflow-y: auto;
+  border-top: 1px solid var(--line);
+}
+.line {
+  display: grid; grid-template-columns: 12px minmax(0, 1fr) auto; align-items: center; gap: 10px;
+  width: 100%; text-align: left;
+  font: 500 0.9rem/1.3 var(--font-body); color: var(--fg);
+  background: none; border: 0; border-bottom: 1px solid var(--line);
+  padding: 9px 6px; cursor: pointer;
+}
+.line:hover { background: var(--surface-2); }
+.line:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.line.is-current { background: var(--accent-soft); font-weight: 700; }
+.line-name { min-width: 0; overflow-wrap: anywhere; }
+.line-end { font: 500 0.74rem/1.2 var(--font-mono); color: var(--muted); white-space: nowrap; }
+.line-dot { width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid var(--muted); }
+.line.is-practiced .line-dot { border-color: var(--ok); background: linear-gradient(90deg, var(--ok) 50%, transparent 50%); }
+.line.is-learned .line-dot { border-color: var(--ok); background: var(--ok); }
+
+.children-block { display: grid; gap: 8px; }
+
+/* ---------- free board page ---------- */
+.play-intro { display: grid; gap: 6px; }
+.play-intro h1 { font: 700 clamp(1.5rem, 3.4vw, 2rem)/1.1 var(--font-display); letter-spacing: -0.02em; }
+.play-intro p { color: var(--muted); }
+.status { display: grid; gap: 4px; }
+.status-text {
+  display: flex; align-items: center; gap: 10px;
+  font: 700 1.25rem/1.3 var(--font-display);
+}
+.status.is-over .status-text { color: var(--accent); }
+.status.is-check .status-text { color: var(--bad); }
 .moves-wrap {
   max-height: 300px;
   overflow-y: auto;
   border-top: 1px solid var(--line);
+  margin-top: 8px;
 }
 .moves {
   margin: 0; padding: 0; list-style: none;
@@ -264,254 +587,157 @@ kbd {
 }
 .moves .num { color: var(--muted); }
 .moves .ply.is-latest { color: var(--accent); font-weight: 700; }
-.moves-empty { color: var(--muted); font-size: 0.92rem; padding-top: 10px; margin: 0; }
+.moves-empty { color: var(--muted); font-size: 0.92rem; padding-top: 10px; }
+.opening-line { font: 500 0.85rem/1.5 var(--font-mono); color: var(--muted); overflow-wrap: anywhere; }
 
-.opening-line {
-  margin: 0;
-  font: 500 0.85rem/1.5 var(--font-mono);
-  color: var(--muted);
-  overflow-wrap: anywhere;
+.footnote {
+  color: var(--muted); font-size: 0.86rem; max-width: 75ch;
+  padding-top: 20px; border-top: 1px solid var(--line);
 }
 
-.footnote { color: var(--muted); font-size: 0.88rem; margin: 0; max-width: 65ch; }
-
-.sr-only {
-  position: absolute; width: 1px; height: 1px; overflow: hidden;
-  clip: rect(0 0 0 0); white-space: nowrap;
+@media (max-width: 480px) {
+  .page { gap: 22px; }
+  .card { grid-template-columns: 88px minmax(0, 1fr); gap: 12px; }
+  .panel { padding: 16px; }
+  .finder { padding: 12px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .piece.anim, .pc { transition: none; }
-  .piece.leaving, .piece.appear { animation: none; }
+  .piece.anim, .pc, .card, .progress span { transition: none; }
+  .piece.leaving, .piece.appear, .badge-mark, .fb-icon.pop, .btn-primary.is-ready { animation: none; }
 }
-
-/* ===================== Trainer and opening picker ===================== */
-a { color: var(--accent); }
-.home-link { color: inherit; text-decoration: none; }
-.nav { display: flex; gap: 4px; margin-left: auto; }
-.nav-link {
-  font: 600 0.92rem/1 var(--font-body);
-  color: var(--muted); text-decoration: none;
-  padding: 8px 10px; border-radius: 6px;
-}
-.nav-link:hover { color: var(--fg); background: var(--surface); }
-
-.home { display: grid; gap: 24px; min-width: 0; }
-.browse { display: grid; gap: 32px; }
-.search { display: grid; gap: 8px; max-width: 640px; }
-#search {
-  font: 500 1.05rem/1.2 var(--font-body);
-  color: var(--fg); background: var(--surface);
-  border: 1px solid var(--line); border-radius: 8px;
-  padding: 13px 14px; width: 100%;
-}
-#search:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: transparent; }
-
-.section-title {
-  margin: 0 0 12px;
-  font: 700 1.2rem/1.2 var(--font-display);
-  display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px;
-}
-.count { font: 500 0.88rem/1.2 var(--font-body); color: var(--muted); }
-
-.starters {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 10px;
-}
-.starter {
-  display: grid; gap: 6px; align-content: start;
-  grid-template-columns: auto 1fr;
-  padding: 14px;
-  background: var(--surface);
-  border: 1px solid var(--line); border-radius: 8px;
-  color: var(--fg); text-decoration: none;
-  min-width: 0;
-}
-.starter:hover, .starter:focus-visible { border-color: var(--accent); outline: none; }
-.starter-side { grid-row: span 3; padding-top: 4px; line-height: 0; }
-.starter-name { font: 700 1rem/1.25 var(--font-display); }
-.starter-moves { font: 500 0.82rem/1.4 var(--font-mono); color: var(--muted); overflow-wrap: anywhere; }
-.starter-count { font-size: 0.82rem; color: var(--muted); }
-
-.families { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 0 24px; align-items: start; }
-.family { border-bottom: 1px solid var(--line); min-width: 0; }
-.family summary {
-  display: flex; justify-content: space-between; gap: 12px;
-  padding: 10px 2px; cursor: pointer; list-style: none;
-}
-.family summary::-webkit-details-marker { display: none; }
-.family summary::before { content: "+"; font: 700 0.95rem/1.4 var(--font-mono); color: var(--muted); width: 1ch; }
-.family[open] summary::before { content: "−"; }
-.family-name { flex: 1; font-weight: 700; }
-.family-count { color: var(--muted); font: 500 0.82rem/1.6 var(--font-mono); }
-.family-entries, .results { display: grid; gap: 2px; padding-bottom: 10px; }
-.results { max-width: 860px; }
-.entry {
-  display: grid; grid-template-columns: 1fr auto; gap: 2px 12px;
-  padding: 8px 10px; border-radius: 6px;
-  color: var(--fg); text-decoration: none; min-width: 0;
-}
-.entry:hover, .entry:focus-visible { background: var(--surface); outline: none; }
-.entry-name { font-weight: 600; min-width: 0; }
-.entry-eco { font: 500 0.8rem/1.6 var(--font-mono); color: var(--muted); }
-.entry-moves { grid-column: 1 / -1; font: 500 0.8rem/1.4 var(--font-mono); color: var(--muted); overflow-wrap: anywhere; }
-.empty { color: var(--muted); }
-
-/* trainer panel */
-.opening-head { display: grid; gap: 2px; }
-.eco { font: 700 0.75rem/1 var(--font-mono); color: var(--muted); letter-spacing: 0.06em; }
-.opening-name { margin: 2px 0 0; font: 700 1.45rem/1.15 var(--font-display); text-wrap: balance; }
-.opening-variation { margin: 0; color: var(--muted); font-weight: 600; }
-.opening-variation.is-moves { font: 500 0.88rem/1.4 var(--font-mono); }
-
-.side-toggle { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
-.side-toggle .status-label { margin-right: 6px; }
-.seg {
-  display: inline-flex; align-items: center; gap: 7px;
-  font: 600 0.9rem/1 var(--font-body); color: var(--fg);
-  background: var(--bg); border: 1px solid var(--line); border-radius: 6px;
-  padding: 8px 12px; cursor: pointer;
-}
-.seg .turn-chip { width: 12px; height: 12px; border-width: 1.5px; }
-.seg[aria-pressed="true"] { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
-.seg:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-
-.feedback {
-  display: grid; gap: 3px;
-  padding: 12px 14px; border-radius: 8px;
-  background: var(--bg);
-  border-left: 4px solid var(--muted);
-}
-.feedback-title { font: 700 1.1rem/1.25 var(--font-display); }
-.feedback-body { color: var(--muted); font-size: 0.94rem; min-height: 1.4em; }
-.feedback.is-turn { border-left-color: var(--accent); }
-.feedback.is-good { border-left-color: var(--ok); }
-.feedback.is-good .feedback-title { color: var(--ok); }
-.feedback.is-bad { border-left-color: var(--check); }
-.feedback.is-bad .feedback-title { color: var(--check); }
-.feedback.is-done { border-left-color: var(--ok); background: var(--ok-soft); }
-
-.lines-block { display: grid; gap: 8px; min-width: 0; }
-.progress-text { font: 500 0.82rem/1 var(--font-mono); color: var(--muted); }
-.progress { height: 4px; border-radius: 2px; background: var(--line); overflow: hidden; }
-.progress span { display: block; height: 100%; width: 0; background: var(--ok); transition: width 300ms ease; }
-.lines {
-  position: relative;
-  list-style: none; margin: 0; padding: 0;
-  max-height: 280px; overflow-y: auto;
-  border-top: 1px solid var(--line);
-}
-.line {
-  display: grid; grid-template-columns: 12px 1fr auto; align-items: center; gap: 10px;
-  width: 100%; text-align: left;
-  font: 500 0.9rem/1.3 var(--font-body); color: var(--fg);
-  background: none; border: 0; border-bottom: 1px solid var(--line);
-  padding: 8px 4px; cursor: pointer;
-}
-.line:hover { background: var(--bg); }
-.line:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
-.line.is-current { background: var(--bg); font-weight: 700; }
-.line-name { min-width: 0; overflow-wrap: anywhere; }
-.line-end { font: 500 0.75rem/1.2 var(--font-mono); color: var(--muted); white-space: nowrap; }
-.line-dot { width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid var(--muted); }
-.line.is-practiced .line-dot { border-color: var(--ok); background: linear-gradient(90deg, var(--ok) 50%, transparent 50%); }
-.line.is-learned .line-dot { border-color: var(--ok); background: var(--ok); }
-.line.is-current .line-dot { box-shadow: 0 0 0 3px var(--hint); }
-
-.children-block { display: grid; gap: 8px; }
-.chips { display: flex; flex-wrap: wrap; gap: 6px; }
-.chip {
-  font: 600 0.84rem/1.2 var(--font-body);
-  color: var(--fg); text-decoration: none;
-  border: 1px solid var(--line); border-radius: 999px;
-  padding: 6px 11px; background: var(--bg);
-}
-.chip:hover, .chip:focus-visible { border-color: var(--accent); outline: none; }
-
-.line-moves {
-  display: flex; flex-wrap: wrap; gap: 4px 6px;
-  margin-top: 14px;
-  font: 500 0.92rem/1.5 var(--font-mono);
-}
-.lm-num { color: var(--muted); }
-.lm.is-hidden { color: var(--muted); opacity: 0.6; }
-.lm.is-latest { color: var(--accent); font-weight: 700; }
 </style>
 </head>
 <body>
 <main class="page">
   <header class="masthead">
-    <h1><a class="home-link" href="#">Open <span class="file">File</span></a></h1>
-    <p>Learn chess openings move by move. Free, no account.</p>
-    <nav class="nav"><a href="#" class="nav-link">Openings</a></nav>
+    <a class="brand" href="#" aria-label="Open File, all openings">
+      <svg class="brand-mark" viewBox="0 0 24 24" aria-hidden="true"><rect class="bm-bg" width="24" height="24"/><path class="bm-sq" d="M0 0h8v8H0zM0 16h8v8H0zM16 8h8v8h-8z"/><rect class="bm-file" x="8" width="8" height="24"/></svg>
+      <span class="brand-name">Open <span class="file">File</span></span>
+    </a>
+    <nav class="nav" aria-label="Pages"><a href="#" class="nav-link is-current">Openings</a></nav>
   </header>
 
   <!-- Opening picker -->
   <section id="view-home" class="home">
-    <div class="search">
-      <label class="status-label" for="search">Find an opening</label>
-      <input id="search" type="search" placeholder="Name, ECO code or moves: Sicilian, C50, e4 c6" autocomplete="off" spellcheck="false">
+    <div class="intro">
+      <h1>Learn an opening by <em>playing</em> it.</h1>
+      <p>Pick an opening and play its moves from memory. Each move gets a check or a cross right away, and once the core moves stick you work through the side lines.</p>
+      <div class="intro-stats" id="intro-stats"></div>
     </div>
-    <div id="search-results" class="results" hidden></div>
 
-    <div id="home-browse" class="browse">
-      <section>
-        <h2 class="section-title">Good places to start</h2>
-        <div class="starters" id="starters"></div>
-      </section>
-      <section>
-        <h2 class="section-title">Every opening, A to Z <span class="count" id="total-count"></span></h2>
-        <div class="families" id="families"></div>
-      </section>
+    <section class="section" id="continue" hidden>
+      <h2 class="section-title">Pick up where you left off</h2>
+      <div class="cards" id="continue-cards"></div>
+    </section>
+
+    <div class="finder" role="search">
+      <div class="finder-search">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5L21 21"/></svg>
+        <label class="sr-only" for="search">Search openings</label>
+        <input id="search" type="search" placeholder="Search by name, ECO code or moves: Sicilian, C50, e4 c6" autocomplete="off" spellcheck="false">
+      </div>
+      <div class="finder-row">
+        <div class="filter-group">
+          <span class="eyebrow" id="lbl-side">Play as</span>
+          <div class="seg" role="group" aria-labelledby="lbl-side" id="f-side">
+            <button type="button" data-v="" aria-pressed="true">Any</button>
+            <button type="button" data-v="w" aria-pressed="false"><span class="turn-chip w"></span>White</button>
+            <button type="button" data-v="b" aria-pressed="false"><span class="turn-chip b"></span>Black</button>
+          </div>
+        </div>
+        <div class="filter-group">
+          <span class="eyebrow" id="lbl-first">White's first move</span>
+          <div class="seg" role="group" aria-labelledby="lbl-first" id="f-first">
+            <button type="button" data-v="" aria-pressed="true">Any</button>
+            <button type="button" data-v="e4" aria-pressed="false"><span class="mv">1.e4</span></button>
+            <button type="button" data-v="d4" aria-pressed="false"><span class="mv">1.d4</span></button>
+            <button type="button" data-v="c4" aria-pressed="false"><span class="mv">1.c4</span></button>
+            <button type="button" data-v="Nf3" aria-pressed="false"><span class="mv">1.Nf3</span></button>
+            <button type="button" data-v="other" aria-pressed="false">Other</button>
+          </div>
+        </div>
+      </div>
+      <div class="filter-group">
+        <span class="eyebrow" id="lbl-tags">Character</span>
+        <div class="chips" role="group" aria-labelledby="lbl-tags" id="f-tags"></div>
+      </div>
+      <p class="filter-note" id="filter-note">Sound, Trappy and the other labels are a rough guide based on each opening's reputation.</p>
     </div>
+
+    <div class="results-head">
+      <p id="result-summary" aria-live="polite"></p>
+      <button class="link-btn" id="clear-filters" type="button" hidden>Clear filters</button>
+    </div>
+
+    <section class="section" id="group-openings">
+      <h2 class="section-title" id="openings-title">All openings</h2>
+      <div class="cards" id="openings"></div>
+    </section>
+
+    <section class="section" id="group-lines" hidden>
+      <h2 class="section-title" id="lines-title"></h2>
+      <p class="section-note" id="lines-note"></p>
+      <div class="groups" id="line-groups"></div>
+      <div class="more-row"><button class="btn" id="more-groups" type="button" hidden></button></div>
+    </section>
+
+    <p class="empty" id="no-results" hidden></p>
   </section>
 
   <!-- Trainer -->
-  <section id="view-train" class="study" hidden>
-    <div class="board-wrap">
-      <div id="board"></div>
-      <div class="line-moves" id="line-moves" aria-label="Moves played in this line"></div>
-    </div>
-
-    <aside class="panel" aria-label="Training panel">
-      <div class="opening-head">
-        <span class="eco" id="t-eco"></span>
-        <h2 class="opening-name" id="t-family"></h2>
-        <p class="opening-variation" id="t-variation"></p>
+  <section id="view-train" class="train" hidden>
+    <a class="back" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>All openings</a>
+    <div class="study">
+      <div class="board-wrap">
+        <div id="board"></div>
+        <div class="line-moves" id="line-moves" aria-label="Moves played in this line"></div>
       </div>
 
-      <div class="side-toggle" role="group" aria-label="Side you play">
-        <span class="status-label">You play</span>
-        <button class="seg" type="button" id="side-w"><span class="turn-chip w"></span>White</button>
-        <button class="seg" type="button" id="side-b"><span class="turn-chip b"></span>Black</button>
-      </div>
-
-      <div class="feedback" id="feedback" aria-live="polite">
-        <span class="feedback-title" id="fb-title">Your move</span>
-        <span class="feedback-body" id="fb-body"></span>
-      </div>
-
-      <div class="controls">
-        <button class="btn" id="btn-hint" type="button">Hint<kbd>H</kbd></button>
-        <button class="btn" id="btn-restart" type="button">Restart line<kbd>R</kbd></button>
-        <button class="btn btn-primary" id="btn-next" type="button">Next line<kbd>N</kbd></button>
-      </div>
-
-      <div class="lines-block">
-        <div class="moves-head">
-          <span class="status-label">Lines</span>
-          <span class="progress-text" id="progress-text"></span>
+      <aside class="panel" aria-label="Training panel">
+        <div class="opening-head">
+          <div class="opening-eco"><span class="eco" id="t-eco"></span><span class="tags" id="t-tags"></span></div>
+          <h1 class="opening-name" id="t-family"></h1>
+          <p class="opening-variation" id="t-variation"></p>
         </div>
-        <div class="progress"><span id="progress-bar"></span></div>
-        <ol class="lines" id="lines"></ol>
-      </div>
 
-      <div class="children-block" id="children-block" hidden>
-        <span class="status-label">Narrow it down</span>
-        <div class="chips" id="children"></div>
-      </div>
-    </aside>
+        <div class="feedback" id="feedback" aria-live="polite">
+          <span class="fb-icon" id="fb-icon"></span>
+          <span class="fb-text">
+            <span class="feedback-title" id="fb-title">Your move</span>
+            <span class="feedback-body" id="fb-body"></span>
+          </span>
+        </div>
+
+        <div class="controls">
+          <button class="btn" id="btn-hint" type="button">Hint<kbd>H</kbd></button>
+          <button class="btn" id="btn-restart" type="button">Restart line<kbd>R</kbd></button>
+          <button class="btn btn-primary" id="btn-next" type="button">Next line<kbd>N</kbd></button>
+        </div>
+
+        <div class="side-toggle">
+          <span class="eyebrow" id="lbl-you">You play</span>
+          <div class="seg" role="group" aria-labelledby="lbl-you">
+            <button type="button" id="side-w" aria-pressed="false"><span class="turn-chip w"></span>White</button>
+            <button type="button" id="side-b" aria-pressed="false"><span class="turn-chip b"></span>Black</button>
+          </div>
+        </div>
+
+        <div class="lines-block">
+          <div class="moves-head">
+            <span class="eyebrow">Lines</span>
+            <span class="progress-text" id="progress-text"></span>
+          </div>
+          <div class="progress"><span id="progress-bar"></span></div>
+          <ol class="lines" id="lines"></ol>
+        </div>
+
+        <div class="children-block" id="children-block" hidden>
+          <span class="eyebrow">Narrow it down</span>
+          <div class="chips" id="children"></div>
+        </div>
+      </aside>
+    </div>
   </section>
 
   <p class="footnote">Opening names and moves come from the <a href="https://github.com/lichess-org/chess-openings">lichess chess-openings</a> list, which is public domain. Your progress is saved in this browser only.</p>
@@ -4389,6 +4615,142 @@ window.OPENINGS = [
 ];
 
 /*
+ * Hand-written labels that sit on top of the openings list. The list itself has
+ * names and moves only, so anything about reputation lives here. These labels are
+ * a rough guide based on how each opening is usually regarded, not engine analysis.
+ *
+ * Names are matched as prefixes: "Englund Gambit" also covers
+ * "Englund Gambit: Main Line" and "Englund Gambit Declined".
+ */
+window.OPENING_TAGS = {
+  // Lines that are filed under a catch-all name in the source list but are
+  // better known under their own. Each rule moves matching lines into `family`.
+  regroup: [
+    { prefix: "Queen's Pawn Game: London System", family: 'London System', label: '' },
+    { prefix: "Queen's Pawn Game: Accelerated London System", family: 'London System', label: 'Accelerated' },
+    { prefix: 'Indian Defense: London System', family: 'London System', label: 'Against the Indian Defense' },
+    { prefix: 'Indian Defense: Accelerated London System', family: 'London System', label: 'Accelerated, against the Indian Defense' },
+    { prefix: 'London System', family: 'London System', label: "Against the King's Indian setup" },
+    { prefix: "Queen's Pawn Game: Colle System", family: 'Colle System', label: '' },
+    { prefix: 'Indian Defense: Colle System', family: 'Colle System', label: 'Against the Indian Defense' },
+    { prefix: "Queen's Pawn Game: Torre Attack", family: 'Torre Attack', label: '' },
+    { prefix: 'Indian Defense: Budapest Gambit', family: 'Budapest Gambit', label: '' },
+    { prefix: "Petrov's Defense: Stafford Gambit", family: 'Stafford Gambit', label: '' },
+    { prefix: "Queen's Gambit Declined: Albin Countergambit", family: 'Albin Countergambit', label: '' },
+    { prefix: 'Sicilian Defense: Smith-Morra Gambit', family: 'Smith-Morra Gambit', label: '' },
+    { prefix: 'Italian Game: Evans Gambit', family: 'Evans Gambit', label: '' },
+    { prefix: 'Italian Game: Two Knights Defense, Fried Liver Attack', family: 'Fried Liver Attack', label: '' },
+    { prefix: 'Italian Game: Two Knights Defense, Traxler Counterattack', family: 'Traxler Counterattack', label: '' },
+    { prefix: "King's Pawn Game: Wayward Queen Attack", family: 'Wayward Queen Attack', label: '' },
+    { prefix: 'Four Knights Game: Halloween Gambit', family: 'Halloween Gambit', label: '' },
+    { prefix: 'Zukertort Opening: Tennison Gambit', family: 'Tennison Gambit', label: '' },
+    { prefix: 'Vienna Gambit, with Max Lange Defense', family: 'Vienna Game', label: 'Vienna Gambit, Max Lange Defense' }
+  ],
+
+  // "X Accepted", "X Declined" and "X, with ..." are folded into "X", except here.
+  keepSeparate: ["Queen's Gambit"],
+
+  // Mainstream openings, most played first. This order is the default sort.
+  tier1: [
+    'Italian Game', 'Ruy Lopez', 'Sicilian Defense', 'French Defense', 'Caro-Kann Defense',
+    "Queen's Gambit", "Queen's Gambit Declined", "Queen's Gambit Accepted", 'London System',
+    'Slav Defense', "King's Indian Defense", 'Scotch Game', 'Vienna Game', 'Scandinavian Defense',
+    'English Opening', 'Nimzo-Indian Defense', 'Semi-Slav Defense', 'Grünfeld Defense',
+    'Four Knights Game', "Petrov's Defense", 'Pirc Defense', 'Catalan Opening', "Queen's Indian Defense",
+    'Dutch Defense', 'Réti Opening', 'Modern Defense', 'Benoni Defense', 'Alekhine Defense',
+    'Philidor Defense', "King's Indian Attack", 'Tarrasch Defense', 'Bogo-Indian Defense'
+  ],
+
+  // Well-known and playable, but a step off the main road.
+  tier2: [
+    "King's Gambit", 'Evans Gambit', 'Fried Liver Attack', 'Stafford Gambit', 'Smith-Morra Gambit',
+    "Bishop's Opening", 'Danish Gambit', 'Benko Gambit', 'Budapest Gambit', 'Albin Countergambit',
+    'Traxler Counterattack', 'Wayward Queen Attack', 'Colle System', 'Torre Attack', 'Trompowsky Attack',
+    'Rapport-Jobava System', 'Ponziani Opening', 'Center Game', 'Three Knights Opening',
+    'Old Indian Defense', 'Neo-Grünfeld Defense', 'Richter-Veresov Attack', 'Blumenfeld Countergambit',
+    "Queen's Pawn Game", "King's Pawn Game", 'Indian Defense', 'Zukertort Opening', "King's Knight Opening",
+    'Rubinstein Opening', 'Yusupov-Rubinstein System', 'East Indian Defense', 'Marienbad System',
+    "Pseudo Queen's Indian Defense", 'Slav Indian', 'Robatsch Defense', 'Horwitz Defense', 'Wade Defense',
+    "Queen's Indian Accelerated"
+  ],
+
+  // Jokes and openings that are simply bad. Everything not listed in a tier is tier 3.
+  tier4: [
+    'Bongcloud Attack', 'Barnes Defense', 'Barnes Opening', 'Fried Fox Defense', 'Borg Defense',
+    'Carr Defense', 'Goldsmith Defense', 'Ware Defense', 'Ware Opening', 'Lemming Defense',
+    'Sodium Attack', 'Amar Opening', 'Creepy Crawly Formation', 'Global Opening', 'Clemenz Opening',
+    'Kádas Opening', 'Duras Gambit', 'Irish Gambit', 'Australian Defense', 'Hippopotamus Defense',
+    'Gunderam Defense', 'Zaire Defense', 'Montevideo Defense', 'Lasker Simul Special', 'Amazon Attack',
+    'Canard Opening', 'Zukertort Defense', 'Formation', 'Dresden Opening'
+  ],
+
+  // Catch-all names: only the starting position and the lines in soundIn count as sound.
+  mixed: ["Queen's Pawn Game", "King's Pawn Game", 'Indian Defense', 'Zukertort Opening'],
+  soundIn: [
+    "Queen's Pawn Game: Symmetrical Variation", "Queen's Pawn Game: Zukertort Variation",
+    'Indian Defense: Normal Variation', 'Indian Defense: Knights Variation',
+    'Indian Defense: Anti-Grünfeld', 'Indian Defense: Anti-Nimzo-Indian',
+    'Zukertort Opening: Kingside Fianchetto', "Zukertort Opening: Queen's Gambit Invitation",
+    'Zukertort Opening: Sicilian Invitation', 'Zukertort Opening: Slav Invitation',
+    'Zukertort Opening: Reversed Grünfeld', 'Zukertort Opening: Double Fianchetto Attack',
+    'Zukertort Opening: Quiet System'
+  ],
+
+  // Gambits that are fully respectable, so they still count as sound.
+  soundGambits: ['Benko Gambit', 'Semi-Slav Defense: Marshall Gambit', 'Semi-Slav Defense: Anti-Moscow Gambit'],
+
+  // Lines inside good openings that are known mistakes.
+  unsound: [
+    "King's Pawn Game: Damiano Defense", "Petrov's Defense: Damiano Variation",
+    'Sicilian Defense: Bowdler Attack', 'Italian Game: Paris Defense'
+  ],
+
+  // Sharp lines that set early traps. Anything with "Trap" in its name is added automatically.
+  trappy: [
+    'Englund Gambit', "Petrov's Defense: Stafford Gambit", "Petrov's Defense: Cochrane Gambit",
+    'Italian Game: Blackburne-Kostić Gambit', 'Italian Game: Jerome Gambit', 'Italian Game: Rousseau Gambit',
+    'Italian Game: Two Knights Defense, Fried Liver Attack', 'Italian Game: Two Knights Defense, Traxler Counterattack',
+    'Italian Game: Two Knights Defense, Max Lange Attack', 'Italian Game: Scotch Gambit',
+    'Scotch Game: Scotch Gambit', 'Scotch Game: Göring Gambit', 'Danish Gambit',
+    "King's Gambit", 'Vienna Game: Vienna Gambit', 'Vienna Gambit, with Max Lange Defense',
+    'Vienna Game: Frankenstein-Dracula Variation', 'Vienna Game: Stanley Variation, Frankenstein-Dracula Variation',
+    'Latvian Gambit', 'Elephant Gambit', 'Four Knights Game: Halloween Gambit',
+    "Bishop's Opening: Urusov Gambit", "Bishop's Opening: Boden-Kieseritzky Gambit",
+    "King's Pawn Game: Wayward Queen Attack", "King's Pawn Game: Napoleon Attack", "King's Pawn Game: Busch-Gass Gambit",
+    'Sicilian Defense: Smith-Morra Gambit', 'Sicilian Defense: Wing Gambit',
+    'French Defense: Advance Variation, Milner-Barry Gambit',
+    'Scandinavian Defense: Portuguese Gambit', 'Scandinavian Defense: Icelandic-Palme Gambit',
+    'Blackmar-Diemer Gambit', "Queen's Gambit Declined: Albin Countergambit",
+    'Indian Defense: Budapest Gambit', "Bird Opening: From's Gambit", 'Dutch Defense: Staunton Gambit',
+    'Zukertort Opening: Tennison Gambit', 'Grob Opening', 'Owen Defense: Matovinsky Gambit',
+    'Ruy Lopez: Berlin Defense, Fishing Pole Variation'
+  ],
+
+  // Exact names. Simple plans, forgiving positions, widely recommended to newer players.
+  beginner: [
+    'Italian Game', 'Italian Game: Giuoco Piano', 'Italian Game: Giuoco Pianissimo', 'Ruy Lopez',
+    'Scotch Game', 'Vienna Game', 'Four Knights Game', "Queen's Gambit", "Queen's Gambit Declined",
+    "Queen's Pawn Game: London System", "Queen's Pawn Game: Accelerated London System",
+    "Queen's Pawn Game: Colle System", 'Slav Defense', 'Caro-Kann Defense', 'French Defense',
+    'Scandinavian Defense', "Petrov's Defense", "King's Indian Defense", "King's Indian Attack",
+    'Sicilian Defense: Alapin Variation', 'French Defense: Exchange Variation',
+    'Caro-Kann Defense: Exchange Variation', "Queen's Gambit Declined: Exchange Variation"
+  ],
+
+  // Which side an opening is trained as when the usual rule gets it wrong. Exact names.
+  side: {
+    'Italian Game: Giuoco Piano': 'w', "King's Gambit Accepted": 'w',
+    'Danish Gambit Accepted': 'w', 'Blackmar-Diemer Gambit Accepted': 'w',
+    'Vienna Gambit, with Max Lange Defense': 'w', 'Latvian Gambit Accepted': 'b',
+    'Englund Gambit Declined': 'b',
+    "King's Indian Attack, with Bf5": 'w', "King's Indian Attack, with e6": 'w',
+    "Petrov's Defense: Stafford Gambit Accepted": 'b', 'Indian Defense: Budapest Gambit Accepted': 'b',
+    'Sicilian Defense: Smith-Morra Gambit Accepted': 'w'
+  }
+};
+if (typeof module !== 'undefined' && module.exports) module.exports = window.OPENING_TAGS;
+
+/*
  * Open File chess engine: board state, legal move generation and game rules.
  *
  * No dependencies and no DOM access, so it runs in the browser and in Node.
@@ -4981,9 +5343,23 @@ window.OPENINGS = [
     return '<svg class="pc pc-' + color + '" viewBox="0 0 100 100" aria-hidden="true">' + SHAPES[type] + '</svg>';
   }
 
+  // One hidden copy of each piece that small diagrams reuse with <use href="#ofp-wk">.
+  function mountSprite(doc) {
+    if (doc.getElementById('ofp-sprite')) return;
+    var html = '';
+    ['w', 'b'].forEach(function (color) {
+      Object.keys(SHAPES).forEach(function (type) {
+        html += '<symbol id="ofp-' + color + type + '" class="ofp pc-' + color + '" viewBox="0 0 100 100">' + SHAPES[type] + '</symbol>';
+      });
+    });
+    var holder = doc.createElement('div');
+    holder.innerHTML = '<svg id="ofp-sprite" width="0" height="0" aria-hidden="true" style="position:absolute">' + html + '</svg>';
+    doc.body.appendChild(holder.firstChild);
+  }
+
   var NAMES = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
-  root.OpenFilePieces = { svg: pieceSvg, names: NAMES };
+  root.OpenFilePieces = { svg: pieceSvg, names: NAMES, mountSprite: mountSprite };
 })(typeof window !== 'undefined' ? window : globalThis);
 
 /*
@@ -5011,6 +5387,9 @@ window.OPENINGS = [
 
   var FILES = 'abcdefgh';
   var PROMO_ORDER = ['q', 'n', 'r', 'b'];
+
+  var CHECK_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 12.5l4.2 4.2L18.5 8"/></svg>';
+  var CROSS_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"/></svg>';
 
   function parsePlacement(fen) {
     var out = {};
@@ -5065,6 +5444,7 @@ window.OPENINGS = [
     root.style.setProperty('--anim', (prefersReducedMotion() ? 0 : this.animationMs) + 'ms');
     this.squaresEl = el('div', 'board-squares', root);
     this.piecesEl = el('div', 'board-pieces', root);
+    this.badgesEl = el('div', 'board-badges', root);
     this.promoEl = el('div', 'board-promo', root);
     this.promoEl.hidden = true;
     this.squareEls = {};
@@ -5093,7 +5473,9 @@ window.OPENINGS = [
       var label = '';
       if (xy[0] === 0) label += '<span class="coord coord-rank">' + name[1] + '</span>';
       if (xy[1] === 7) label += '<span class="coord coord-file">' + name[0] + '</span>';
-      sq.innerHTML = label;
+      var marks = sq.querySelectorAll('.coord');
+      for (var i = 0; i < marks.length; i++) marks[i].remove();
+      sq.insertAdjacentHTML('afterbegin', label);
     }
   };
 
@@ -5136,6 +5518,31 @@ window.OPENINGS = [
   P.flip = function () { this.setOrientation(this.orientation === 'w' ? 'b' : 'w'); };
 
   P.setMarks = function (marks) { this.marks = marks || {}; this._renderHighlights(); };
+
+  /*
+   * Pops a check mark ('good') or a cross ('bad') on a square, with a tint behind
+   * it, holds for `ms`, then fades out and removes itself.
+   */
+  P.flashBadge = function (sq, kind, ms) {
+    var hold = ms != null ? ms : 900;
+    var xy = this._xy(sq);
+    // The tint sits on the square, under the pieces; the mark sits above them.
+    var tint = el('div', 'sq-flash flash-' + kind, this.squareEls[sq]);
+    var b = el('div', 'board-badge badge-' + kind, this.badgesEl);
+    b.style.left = (xy[0] * 12.5) + '%';
+    b.style.top = (xy[1] * 12.5) + '%';
+    tint.style.setProperty('--hold', hold + 'ms');
+    b.style.setProperty('--hold', hold + 'ms');
+    b.innerHTML = '<span class="badge-mark">' + (kind === 'good' ? CHECK_ICON : CROSS_ICON) + '</span>';
+    setTimeout(function () { b.remove(); tint.remove(); }, hold + 700);
+    return b;
+  };
+
+  P.clearBadges = function () {
+    this.badgesEl.innerHTML = '';
+    var old = this.squaresEl.querySelectorAll('.sq-flash');
+    for (var i = 0; i < old.length; i++) old[i].remove();
+  };
 
   /* ---------- position diff and animation ---------- */
 
@@ -5395,83 +5802,66 @@ window.OPENINGS = [
     }
   };
 
+  /*
+   * A small, static diagram of a position as an SVG string. Pieces come from the
+   * shared sprite (OpenFilePieces.mountSprite), so hundreds of these stay cheap.
+   */
+  var darkPath = '';
+  for (var dy = 0; dy < 8; dy++) for (var dx = 0; dx < 8; dx++) if ((dx + dy) % 2 === 1) darkPath += 'M' + dx + ' ' + dy + 'h1v1h-1z';
+
+  BoardView.mini = function (fen, orientation) {
+    var pos = parsePlacement(fen), out = '';
+    for (var sq in pos) {
+      var f = FILES.indexOf(sq[0]), r = Number(sq[1]);
+      var x = orientation === 'b' ? 7 - f : f, y = orientation === 'b' ? r - 1 : 8 - r;
+      var p = pos[sq], color = p === p.toUpperCase() ? 'w' : 'b';
+      out += '<use href="#ofp-' + color + p.toLowerCase() + '" x="' + (x + 0.04) + '" y="' + (y + 0.04) + '" width="0.92" height="0.92"/>';
+    }
+    return '<svg class="mini-board" viewBox="0 0 8 8" aria-hidden="true"><rect class="mini-light" width="8" height="8"/>' +
+      '<path class="mini-dark" d="' + darkPath + '"/>' + out + '</svg>';
+  };
+
   root.BoardView = BoardView;
 })(typeof window !== 'undefined' ? window : globalThis);
 
 /*
- * Open File repertoire: turns the flat openings list into things to drill.
+ * Open File repertoire: turns the flat openings list into things to browse and drill.
  * No DOM. Works in the browser (window.Repertoire) and in Node.
  *
- *   var rep = new Repertoire(window.OPENINGS);
- *   rep.entries               all openings: { id, eco, name, family, variation, moves[] }
- *   rep.families()            [{ name, entries[] }] sorted A to Z
+ *   var rep = new Repertoire(window.OPENINGS, window.OPENING_TAGS);
+ *   rep.entries        every opening: { id, eco, name, family, variation, moves[],
+ *                                       side, first, tier, tags: { sound, trappy, ... } }
+ *   rep.families       [{ name, root, entries[], tier, rank }] in default order
  *   rep.byId(id)
- *   rep.search(text, limit)
- *   rep.linesFor(entry)       [main line, ...branch lines], each { id, name, eco, moves[] }
- *   Repertoire.defaultSide(entry)  'w' or 'b'
+ *   rep.query(filters) grouped matches for the picker, see below
+ *   rep.linesFor(entry)    [core line, ...branch lines], each { id, name, eco, moves[] }
+ *   rep.childrenOf(entry)  the next named positions inside an opening
  */
 (function (root) {
   'use strict';
+
+  var FIRST_MOVES = ['e4', 'd4', 'c4', 'Nf3'];
 
   function slug(s) {
     return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
       .replace(/['’]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
   }
 
-  function Repertoire(rows) {
-    var used = {};
-    this.entries = rows.map(function (r, i) {
-      var name = r[1];
-      var colon = name.indexOf(':');
-      var base = slug(name), id = base, n = 2;
-      while (used[id]) id = base + '-' + (n++);
-      used[id] = true;
-      return {
-        id: id,
-        index: i,
-        eco: r[0],
-        name: name,
-        family: colon === -1 ? name : name.slice(0, colon),
-        variation: colon === -1 ? '' : name.slice(colon + 1).trim(),
-        moves: r[2].split(' ')
-      };
-    });
-    this._byId = {};
-    var self = this;
-    this.entries.forEach(function (e) { self._byId[e.id] = e; });
+  function fold(s) {
+    return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/['’]/g, '');
   }
-  var P = Repertoire.prototype;
 
-  P.byId = function (id) { return this._byId[id] || null; };
+  // True when `name` is `prefix` or continues it at a word boundary.
+  function hasPrefix(name, prefix) {
+    if (name.indexOf(prefix) !== 0) return false;
+    var c = name.charAt(prefix.length);
+    return c === '' || c === ':' || c === ',' || c === ' ';
+  }
 
-  P.families = function () {
-    var map = {}, list = [];
-    this.entries.forEach(function (e) {
-      if (!map[e.family]) { map[e.family] = { name: e.family, entries: [] }; list.push(map[e.family]); }
-      map[e.family].entries.push(e);
-    });
-    list.forEach(function (f) {
-      // The family's own entry (no variation) first, then shortest lines, then by name.
-      f.entries.sort(function (a, b) {
-        return (a.variation ? 1 : 0) - (b.variation ? 1 : 0) || a.moves.length - b.moves.length || a.name.localeCompare(b.name);
-      });
-      f.root = f.entries[0];
-    });
-    return list.sort(function (a, b) { return a.name.localeCompare(b.name); });
-  };
-
-  // Matches every word of the query against name, ECO code and moves.
-  P.search = function (text, limit) {
-    var words = String(text || '').toLowerCase().replace(/[’']/g, '').split(/\s+/).filter(Boolean);
-    if (!words.length) return [];
-    var out = [];
-    for (var i = 0; i < this.entries.length && out.length < (limit || 60); i++) {
-      var e = this.entries[i];
-      var hay = (e.name + ' ' + e.eco + ' ' + e.moves.join(' ')).toLowerCase().replace(/[’']/g, '');
-      if (words.every(function (w) { return hay.indexOf(w) !== -1; })) out.push(e);
-    }
-    return out.sort(function (a, b) { return a.moves.length - b.moves.length; });
-  };
+  function anyPrefix(list, name) {
+    for (var i = 0; list && i < list.length; i++) if (hasPrefix(name, list[i])) return true;
+    return false;
+  }
 
   function startsWith(moves, prefix) {
     if (moves.length <= prefix.length) return false;
@@ -5480,7 +5870,186 @@ window.OPENINGS = [
   }
 
   /*
-   * The chosen opening is the main line. Branch lines are the deepest named
+   * Which side an opening belongs to. The most specific part of the name decides
+   * when it says so ("... Defense" is Black's, "... Attack" is White's). Otherwise
+   * the opening belongs to whoever plays its last move, since that move is the choice
+   * the name describes.
+   */
+  function sideOf(e, T) {
+    if (T.side && T.side[e.name]) return T.side[e.name];
+    var last = e.name.split(/[:,]/).pop();
+    if (/(Defen[cs]e|Countergambit|Counter-Gambit|Counterattack)/i.test(last)) return 'b';
+    if (/(Attack|Opening|System|Game)\b/i.test(last)) return 'w';
+    return e.moves.length % 2 === 1 ? 'w' : 'b';
+  }
+
+  function Repertoire(rows, tags) {
+    var T = tags || {};
+    var used = {};
+    var self = this;
+
+    this.entries = rows.map(function (r, i) {
+      var name = r[1];
+      var colon = name.indexOf(':');
+      var base = slug(name), id = base, n = 2;
+      while (used[id]) id = base + '-' + (n++);
+      used[id] = true;
+      return {
+        id: id, index: i, eco: r[0], name: name,
+        family: colon === -1 ? name : name.slice(0, colon),
+        variation: colon === -1 ? '' : name.slice(colon + 1).trim(),
+        moves: r[2].split(' ')
+      };
+    });
+
+    this._regroup(T);
+    this._tag(T);
+    this._measure();
+
+    this._byId = {};
+    this.entries.forEach(function (e) { self._byId[e.id] = e; });
+    this.families = this._buildFamilies();
+  }
+  var P = Repertoire.prototype;
+
+  P._regroup = function (T) {
+    var rules = T.regroup || [];
+    function join(a, b) { return [a, b].filter(Boolean).join(', '); }
+
+    this.entries.forEach(function (e) {
+      for (var i = 0; i < rules.length; i++) {
+        var r = rules[i];
+        if (!hasPrefix(e.name, r.prefix)) continue;
+        var rest = e.name.slice(r.prefix.length).replace(/^[:,]?\s*/, '');
+        e.family = r.family;
+        e.variation = join(r.label, rest);
+        return;
+      }
+    });
+
+    // Fold "X Accepted", "X Declined" and "X, with ..." into the family "X".
+    var names = {};
+    this.entries.forEach(function (e) { names[e.family] = true; });
+    var keep = T.keepSeparate || [];
+    var target = {};
+    Object.keys(names).forEach(function (f) {
+      var m = /^(.+?)( Accepted| Declined|, with .+)$/.exec(f);
+      if (m && names[m[1]] && keep.indexOf(m[1]) === -1) target[f] = { family: m[1], label: m[2].replace(/^,? /, '') };
+    });
+    this.entries.forEach(function (e) {
+      var t = target[e.family];
+      if (!t) return;
+      e.family = t.family;
+      e.variation = join(t.label.charAt(0).toUpperCase() + t.label.slice(1), e.variation);
+    });
+  };
+
+  P._tag = function (T) {
+    var tier = {}, rank = {};
+    (T.tier1 || []).forEach(function (n, i) { tier[n] = 1; rank[n] = i; });
+    (T.tier2 || []).forEach(function (n, i) { tier[n] = 2; rank[n] = i; });
+    (T.tier4 || []).forEach(function (n) { tier[n] = 4; });
+    var mixed = T.mixed || [], beginner = T.beginner || [];
+
+    this.entries.forEach(function (e) {
+      e.tier = tier[e.family] || 3;
+      e.rank = rank[e.family] != null ? rank[e.family] : 999;
+      e.first = FIRST_MOVES.indexOf(e.moves[0]) !== -1 ? e.moves[0] : 'other';
+      e.side = sideOf(e, T);
+      e.hay = fold(e.name + ' ' + e.family + ' ' + e.eco + ' ' + e.moves.join(' '));
+
+      // "Queen's Gambit Declined" is a defense, not a gambit line, so look past that name.
+      var gambitText = /^Queen's Gambit/.test(e.name) ? e.name.replace(/^Queen's Gambit( Declined| Accepted)?/, '') : e.name;
+      var gambit = /gambit/i.test(gambitText);
+      var trappy = /\btrap\b/i.test(e.name) || anyPrefix(T.trappy, e.name);
+      var base = e.tier === 1 ||
+        (e.tier === 2 && mixed.indexOf(e.family) === -1) ||
+        (mixed.indexOf(e.family) !== -1 && (!e.variation || anyPrefix(T.soundIn, e.name)));
+      e.tags = {
+        sound: base && !trappy && (!gambit || anyPrefix(T.soundGambits, e.name)) && !anyPrefix(T.unsound, e.name),
+        beginner: beginner.indexOf(e.name) !== -1,
+        trappy: trappy,
+        gambit: gambit,
+        offbeat: e.tier >= 3
+      };
+    });
+  };
+
+  // size = how many named lines continue each opening. With no popularity data
+  // in the list, this is the best available sign of how much theory a line has.
+  P._measure = function () {
+    var sorted = this.entries.map(function (e) { return { e: e, key: e.moves.join(' ') + ' ' }; })
+      .sort(function (a, b) { return a.key < b.key ? -1 : a.key > b.key ? 1 : 0; });
+    for (var i = 0; i < sorted.length; i++) {
+      var n = 0;
+      for (var j = i + 1; j < sorted.length && sorted[j].key.indexOf(sorted[i].key) === 0; j++) n++;
+      sorted[i].e.size = n;
+    }
+  };
+
+  P._buildFamilies = function () {
+    var map = {}, list = [];
+    this.entries.forEach(function (e) {
+      if (!map[e.family]) { map[e.family] = { name: e.family, entries: [] }; list.push(map[e.family]); }
+      map[e.family].entries.push(e);
+    });
+    list.forEach(function (f) {
+      // The family's own entry (no variation) first, then shortest lines, then by name.
+      f.entries.sort(function (a, b) {
+        return (a.variation ? 1 : 0) - (b.variation ? 1 : 0) || a.moves.length - b.moves.length || a.index - b.index;
+      });
+      f.root = f.entries[0];
+      f.tier = f.root.tier;
+      f.rank = f.root.rank;
+    });
+    this._familyOf = map;
+    return list.sort(function (a, b) {
+      return a.tier - b.tier || a.rank - b.rank || a.name.localeCompare(b.name);
+    });
+  };
+
+  P.byId = function (id) { return this._byId[id] || null; };
+
+  /*
+   * filters: { text, side: 'w'|'b', first: 'e4'|'d4'|'c4'|'Nf3'|'other', tags: ['sound', ...], test: fn }
+   * Every given filter must hold. Returns one group per family that has a match:
+   *   { family, rootMatches, count, top }
+   * `top` holds the matching lines that are not already covered by a shorter
+   * matching line of the same family, the ones with the most theory first.
+   */
+  P.query = function (filters) {
+    var f = filters || {};
+    var words = fold(String(f.text || '')).split(/\s+/).filter(Boolean);
+    var tags = f.tags || [];
+
+    function ok(e) {
+      if (f.side && e.side !== f.side) return false;
+      if (f.first && e.first !== f.first) return false;
+      for (var i = 0; i < tags.length; i++) if (!e.tags[tags[i]]) return false;
+      for (var j = 0; j < words.length; j++) if (e.hay.indexOf(words[j]) === -1) return false;
+      return !f.test || f.test(e);
+    }
+
+    var out = [];
+    this.families.forEach(function (fam) {
+      var hits = fam.entries.filter(ok);
+      if (!hits.length) return;
+      var byLength = hits.slice().sort(function (a, b) { return a.moves.length - b.moves.length || a.index - b.index; });
+      var top = [], seen = {};
+      byLength.forEach(function (h) {
+        if (seen[h.name]) return;
+        if (top.some(function (t) { return startsWith(h.moves, t.moves); })) return;
+        seen[h.name] = true;
+        top.push(h);
+      });
+      top.sort(function (a, b) { return b.size - a.size || a.moves.length - b.moves.length || a.index - b.index; });
+      out.push({ family: fam, rootMatches: hits.indexOf(fam.root) !== -1, count: hits.length, top: top });
+    });
+    return out;
+  };
+
+  /*
+   * The chosen opening is the core line. Branch lines are the deepest named
    * lines that continue it (a line that another line extends is covered by
    * that longer line). Branches are ordered so that well-developed lines,
    * the ones with more named continuations, come first.
@@ -5514,10 +6083,23 @@ window.OPENINGS = [
       return a.moves.length - b.moves.length;
     });
 
-    function line(e, main) {
-      return { id: e.moves.join(' '), name: e.name, eco: e.eco, moves: e.moves, main: !!main };
+    // A family's main entry also drills the family's lines that reach it by another
+    // move order (the London System, for one, is filed under several first moves).
+    var others = [];
+    var fam = this._familyOf[entry.family];
+    if (fam && fam.root === entry) {
+      var rest = fam.entries.filter(function (e) {
+        return e !== entry && !startsWith(e.moves, entry.moves) && !startsWith(entry.moves, e.moves);
+      });
+      others = rest.filter(function (d) {
+        return !rest.some(function (e) { return startsWith(e.moves, d.moves); });
+      }).sort(function (a, b) { return b.size - a.size || a.index - b.index; });
     }
-    return [line(entry, true)].concat(leaves.map(function (e) { return line(e, false); }));
+
+    function line(e, main) {
+      return { id: e.moves.join(' '), name: e.name, label: e.variation, family: e.family, eco: e.eco, moves: e.moves, main: !!main };
+    }
+    return [line(entry, true)].concat(leaves.concat(others).map(function (e) { return line(e, false); }));
   };
 
   // The next named positions inside an opening, for narrowing down what to drill.
@@ -5532,9 +6114,24 @@ window.OPENINGS = [
     });
   };
 
-  // Openings named as a Black reply are trained as Black; everything else as White.
-  Repertoire.defaultSide = function (entry) {
-    return /(Defen[cs]e|Countergambit|Counter-Gambit|Counterattack)/i.test(entry.family) ? 'b' : 'w';
+  // Checks the hand-written labels against the list. Returns names that match nothing.
+  Repertoire.unmatchedLabels = function (rows, T) {
+    var names = rows.map(function (r) { return r[1]; });
+    var missing = [];
+    function check(list, exact, what) {
+      (list || []).forEach(function (p) {
+        var hit = names.some(function (n) { return exact ? n === p : hasPrefix(n, p); });
+        if (!hit) missing.push(what + ': ' + p);
+      });
+    }
+    check((T.regroup || []).map(function (r) { return r.prefix; }), false, 'regroup');
+    check(T.soundIn, false, 'soundIn');
+    check(T.soundGambits, false, 'soundGambits');
+    check(T.unsound, false, 'unsound');
+    check(T.trappy, false, 'trappy');
+    check(T.beginner, true, 'beginner');
+    check(Object.keys(T.side || {}), true, 'side');
+    return missing;
   };
 
   Repertoire.slug = slug;
@@ -5553,23 +6150,48 @@ window.OPENINGS = [
   'use strict';
 
   var $ = function (id) { return document.getElementById(id); };
-  var rep = new Repertoire(window.OPENINGS);
-  var families = rep.families();
+  var rep = new Repertoire(window.OPENINGS, window.OPENING_TAGS);
   var OPPONENT_DELAY = 450;
+  var GROUPS_SHOWN = 9;   // "lines inside other openings" cards before "Show more"
+  var LINES_SHOWN = 4;    // lines per such card before "Show all"
 
-  var STARTERS = [
-    'Italian Game: Giuoco Piano', 'Ruy Lopez: Morphy Defense', 'Scotch Game', 'Vienna Game',
-    "Queen's Gambit Declined", "Queen's Gambit Accepted", 'Slav Defense', 'London System',
-    'Sicilian Defense: Najdorf Variation', 'Sicilian Defense: Dragon Variation', 'French Defense',
-    'Caro-Kann Defense', 'Scandinavian Defense', "King's Indian Defense", 'Nimzo-Indian Defense', 'English Opening'
+  var TAGS = [
+    { key: 'sound', label: 'Sound', hint: 'Mainstream openings trusted at master level' },
+    { key: 'beginner', label: 'Beginner-friendly', hint: 'Simple plans, widely recommended to newer players' },
+    { key: 'trappy', label: 'Trappy', hint: 'Sharp lines that set early traps' },
+    { key: 'gambit', label: 'Gambit', hint: 'Gives up material for fast development' },
+    { key: 'offbeat', label: 'Offbeat', hint: 'Rare openings that take opponents out of book' },
+    { key: 'started', label: 'Started', hint: 'Openings you have already trained here' }
   ];
+
+  OpenFilePieces.mountSprite(document);
+
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; });
+  }
+  function sideName(c) { return c === 'w' ? 'White' : 'Black'; }
+  function plural(n, word) { return n.toLocaleString() + ' ' + word + (n === 1 ? '' : 's'); }
+
+  function movesText(moves, max) {
+    var out = [];
+    for (var i = 0; i < moves.length && i < (max || 99); i++) out.push((i % 2 === 0 ? (i / 2 + 1) + '.' : '') + moves[i]);
+    if (max && moves.length > max) out.push('…');
+    return out.join(' ');
+  }
+  function lastMoveText(moves) {
+    var i = moves.length - 1;
+    return (Math.floor(i / 2) + 1) + (i % 2 === 0 ? '.' : '...') + moves[i];
+  }
 
   /* ---------- saved progress (this browser only) ---------- */
 
   var store = (function () {
     var KEY = 'openfile:v1';
-    var data = { lines: {}, side: {} };
-    try { data = Object.assign(data, JSON.parse(localStorage.getItem(KEY)) || {}); } catch (e) {}
+    var data = { lines: {}, side: {}, recent: {} };
+    try {
+      var saved = JSON.parse(localStorage.getItem(KEY));
+      if (saved) Object.keys(data).forEach(function (k) { if (saved[k]) data[k] = saved[k]; });
+    } catch (e) {}
     function save() { try { localStorage.setItem(KEY, JSON.stringify(data)); } catch (e) {} }
     return {
       lineStatus: function (lineId, side) { return data.lines[side + '|' + lineId] || null; },
@@ -5579,133 +6201,242 @@ window.OPENINGS = [
         data.lines[k] = status; save();
       },
       side: function (openingId) { return data.side[openingId] || null; },
-      setSide: function (openingId, side) { data.side[openingId] = side; save(); }
+      setSide: function (openingId, side) { data.side[openingId] = side; save(); },
+      touch: function (openingId) { data.recent[openingId] = Date.now(); save(); },
+      started: function (openingId) { return !!data.recent[openingId]; },
+      recent: function () {
+        return Object.keys(data.recent).sort(function (a, b) { return data.recent[b] - data.recent[a]; });
+      }
     };
   })();
 
   /* ---------- picker ---------- */
 
-  function movesText(moves, max) {
-    var out = [];
-    for (var i = 0; i < moves.length && i < (max || 99); i++) out.push((i % 2 === 0 ? (i / 2 + 1) + '.' : '') + moves[i]);
-    if (max && moves.length > max) out.push('…');
-    return out.join(' ');
+  var filters = { text: '', side: '', first: '', tags: [] };
+  var showAllGroups = false;
+  var expanded = {};
+  var homeScroll = 0;
+  var miniCache = {};
+  var scratch = new Chess();
+
+  function mini(e) {
+    if (!miniCache[e.id]) {
+      scratch.reset();
+      e.moves.forEach(function (m) { scratch.move(m); });
+      miniCache[e.id] = BoardView.mini(scratch.fen(), e.side);
+    }
+    return miniCache[e.id];
   }
 
-  function entryRow(e, label) {
-    var a = document.createElement('a');
-    a.className = 'entry';
-    a.href = '#' + e.id;
-    a.innerHTML = '<span class="entry-name"></span><span class="entry-eco"></span><span class="entry-moves"></span>';
-    a.children[0].textContent = label || e.name;
-    a.children[1].textContent = e.eco;
-    a.children[2].textContent = movesText(e.moves, 10);
-    return a;
-  }
-
-  function renderHome() {
-    var starters = $('starters');
-    STARTERS.forEach(function (name) {
-      var e = rep.entries.filter(function (x) { return x.name === name; })[0];
-      if (!e) return;
-      var card = document.createElement('a');
-      card.className = 'starter';
-      card.href = '#' + e.id;
-      var side = Repertoire.defaultSide(e);
-      card.innerHTML = '<span class="starter-side"><span class="turn-chip ' + side + '"></span></span>' +
-        '<span class="starter-name"></span><span class="starter-moves"></span><span class="starter-count"></span>';
-      card.querySelector('.starter-name').textContent = e.name.replace(':', ': ');
-      card.querySelector('.starter-moves').textContent = movesText(e.moves, 8);
-      card.querySelector('.starter-count').textContent = rep.linesFor(e).length + ' lines · play as ' + (side === 'w' ? 'White' : 'Black');
-      starters.appendChild(card);
+  function tagsHtml(e) {
+    var out = '';
+    TAGS.forEach(function (t) {
+      if (e.tags[t.key]) out += '<span class="tag tag-' + t.key + '">' + esc(t.label) + '</span>';
     });
+    return out ? '<span class="tags">' + out + '</span>' : '';
+  }
 
-    $('total-count').textContent = rep.entries.length.toLocaleString() + ' named lines in ' + families.length + ' families';
-    var list = $('families');
-    families.forEach(function (f) {
-      var d = document.createElement('details');
-      d.className = 'family';
-      var s = document.createElement('summary');
-      s.innerHTML = '<span class="family-name"></span><span class="family-count"></span>';
-      s.children[0].textContent = f.name;
-      s.children[1].textContent = f.entries.length;
-      d.appendChild(s);
-      d.addEventListener('toggle', function () {
-        if (!d.open || d.dataset.filled) return;
-        d.dataset.filled = '1';
-        var box = document.createElement('div');
-        box.className = 'family-entries';
-        f.entries.forEach(function (e) { box.appendChild(entryRow(e, e.variation || 'Main position')); });
-        d.appendChild(box);
+  function cardHtml(e, o) {
+    return '<a class="card" href="#' + e.id + '">' +
+      '<span class="card-board">' + mini(e) + '</span>' +
+      '<span class="card-body">' +
+        '<span class="card-name">' + esc(o.title) + '</span>' +
+        (o.sub ? '<span class="card-sub">' + esc(o.sub) + '</span>' : '') +
+        '<span class="card-moves">' + esc(movesText(e.moves, 8)) + '</span>' +
+        '<span class="card-meta"><span class="turn-chip ' + e.side + '"></span>' + sideName(e.side) + (o.meta ? ' · ' + esc(o.meta) : '') + '</span>' +
+        (o.extra || tagsHtml(e)) +
+      '</span></a>';
+  }
+
+  function groupHtml(g) {
+    var fam = g.family, all = expanded[fam.name];
+    var shown = all ? g.top : g.top.slice(0, LINES_SHOWN);
+    var items = shown.map(function (e) {
+      return '<li><a href="#' + e.id + '"><span class="gl-name">' + esc(e.variation || movesText(e.moves)) +
+        '</span><span class="gl-move">' + esc(lastMoveText(e.moves)) + '</span></a></li>';
+    }).join('');
+    var more = g.top.length > shown.length
+      ? '<button class="link-btn" type="button" data-expand="' + esc(fam.name) + '">Show all ' + g.top.length + '</button>' : '';
+    return '<div class="group">' +
+      '<a class="group-head" href="#' + fam.root.id + '"><span class="group-name">' + esc(fam.name) + '</span>' +
+      '<span class="group-count">' + plural(g.count, 'line') + '</span></a>' +
+      '<ul class="group-lines">' + items + '</ul>' + more + '</div>';
+  }
+
+  function progressFor(e) {
+    var side = store.side(e.id) || e.side;
+    var lines = rep.linesFor(e), learned = 0;
+    lines.forEach(function (l) { if (store.lineStatus(l.id, side) === 'learned') learned++; });
+    return { learned: learned, total: lines.length };
+  }
+
+  function renderContinue() {
+    var active = filters.text || filters.side || filters.first || filters.tags.length;
+    var ids = active ? [] : store.recent().filter(function (id) { return rep.byId(id); }).slice(0, 3);
+    $('continue').hidden = ids.length === 0;
+    $('continue-cards').innerHTML = ids.map(function (id) {
+      var e = rep.byId(id), p = progressFor(e);
+      return cardHtml(e, {
+        title: e.family, sub: e.variation,
+        extra: '<span class="card-progress">' + p.learned + ' of ' + plural(p.total, 'line') + ' learned' +
+          '<span class="progress"><span style="width:' + (p.learned / p.total * 100) + '%"></span></span></span>'
       });
-      list.appendChild(d);
-    });
+    }).join('');
+  }
 
-    var search = $('search');
-    search.addEventListener('input', function () {
-      var q = search.value.trim();
-      var box = $('search-results');
-      box.innerHTML = '';
-      $('home-browse').hidden = !!q;
-      box.hidden = !q;
-      if (!q) return;
-      var found = rep.search(q, 80);
-      if (!found.length) {
-        var p = document.createElement('p');
-        p.className = 'empty';
-        p.textContent = 'No opening matches "' + q + '". Try part of the name, like "dragon", or a move such as "c4".';
-        box.appendChild(p);
-        return;
-      }
-      found.forEach(function (e) { box.appendChild(entryRow(e)); });
+  function renderResults() {
+    var q = {
+      text: filters.text, side: filters.side, first: filters.first,
+      tags: filters.tags.filter(function (t) { return t !== 'started'; })
+    };
+    if (filters.tags.indexOf('started') !== -1) q.test = function (e) { return store.started(e.id); };
+    var active = !!(filters.text || filters.side || filters.first || filters.tags.length);
+
+    var groups = rep.query(q);
+    var openings = groups.filter(function (g) { return g.rootMatches; });
+    var inside = groups.filter(function (g) { return !g.rootMatches; });
+    var who = filters.side ? sideName(filters.side) : '';
+
+    $('openings-title').textContent = who ? 'Openings for ' + who : active ? 'Matching openings' : 'All openings';
+    $('group-openings').hidden = openings.length === 0;
+    $('openings').innerHTML = openings.map(function (g) {
+      var e = g.family.root;
+      return cardHtml(e, { title: g.family.name, sub: e.variation, meta: plural(g.family.entries.length, 'line') });
+    }).join('');
+
+    $('group-lines').hidden = inside.length === 0;
+    $('lines-title').textContent = who ? who + "'s options inside other openings" : 'Matching lines inside other openings';
+    $('lines-note').textContent = who
+      ? 'Lines where ' + who + ' picks the variation, grouped by the opening they belong to. The lines with the most theory come first.'
+      : 'Single lines that match, grouped by the opening they belong to.';
+    var visible = showAllGroups ? inside : inside.slice(0, GROUPS_SHOWN);
+    $('line-groups').innerHTML = visible.map(groupHtml).join('');
+    var more = $('more-groups');
+    more.hidden = visible.length === inside.length;
+    more.textContent = 'Show ' + (inside.length - visible.length) + ' more openings';
+
+    var lineCount = inside.reduce(function (n, g) { return n + g.count; }, 0);
+    var summary = plural(openings.length, 'opening');
+    if (inside.length) summary += ' · ' + plural(lineCount, 'line') + ' inside ' + plural(inside.length, 'other opening');
+    $('result-summary').textContent = groups.length ? summary : '';
+    $('clear-filters').hidden = !active;
+    var none = $('no-results');
+    none.hidden = groups.length > 0;
+    none.textContent = filters.text
+      ? 'Nothing matches "' + filters.text + '" with these filters. Try part of a name, like "dragon", or a move such as "c4".'
+      : 'No opening has every label you picked. Remove one to see more.';
+    renderContinue();
+  }
+
+  function syncFilterButtons() {
+    [['f-side', filters.side], ['f-first', filters.first]].forEach(function (pair) {
+      Array.prototype.forEach.call($(pair[0]).children, function (b) {
+        b.setAttribute('aria-pressed', String(b.dataset.v === pair[1]));
+      });
     });
+    Array.prototype.forEach.call($('f-tags').children, function (b) {
+      b.setAttribute('aria-pressed', String(filters.tags.indexOf(b.dataset.tag) !== -1));
+    });
+    // "First move" reads from the side the visitor plays.
+    $('lbl-first').textContent = filters.side === 'b' ? "Against White's first move" : "White's first move";
+  }
+
+  function filtersChanged() {
+    showAllGroups = false;
+    expanded = {};
+    syncFilterButtons();
+    renderResults();
+  }
+
+  function setupHome() {
+    $('intro-stats').innerHTML = '<span><b>' + rep.entries.length.toLocaleString() + '</b> named lines</span>' +
+      '<span><b>' + rep.families.length + '</b> openings</span><span><b>Free</b>, no account</span>';
+
+    $('f-tags').innerHTML = TAGS.map(function (t) {
+      return '<button class="chip" type="button" data-tag="' + t.key + '" aria-pressed="false" title="' + esc(t.hint) + '">' + esc(t.label) + '</button>';
+    }).join('');
+
+    $('search').addEventListener('input', function () { filters.text = this.value.trim(); filtersChanged(); });
+    $('f-side').addEventListener('click', function (e) {
+      var b = e.target.closest('button'); if (!b) return;
+      filters.side = b.dataset.v; filtersChanged();
+    });
+    $('f-first').addEventListener('click', function (e) {
+      var b = e.target.closest('button'); if (!b) return;
+      filters.first = b.dataset.v; filtersChanged();
+    });
+    $('f-tags').addEventListener('click', function (e) {
+      var b = e.target.closest('button'); if (!b) return;
+      var i = filters.tags.indexOf(b.dataset.tag);
+      if (i === -1) filters.tags.push(b.dataset.tag); else filters.tags.splice(i, 1);
+      filtersChanged();
+    });
+    $('clear-filters').addEventListener('click', function () {
+      filters = { text: '', side: '', first: '', tags: [] };
+      $('search').value = '';
+      filtersChanged();
+    });
+    $('more-groups').addEventListener('click', function () { showAllGroups = true; renderResults(); });
+    $('line-groups').addEventListener('click', function (e) {
+      var b = e.target.closest('[data-expand]'); if (!b) return;
+      expanded[b.dataset.expand] = true; renderResults();
+    });
+    $('view-home').addEventListener('click', function (e) {
+      if (e.target.closest('a[href^="#"]')) homeScroll = window.scrollY;
+    });
+    syncFilterButtons();
   }
 
   /* ---------- trainer ---------- */
 
+  var ICONS = {
+    turn: '<svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>',
+    wait: '<svg viewBox="0 0 24 24"><path d="M6 12h.01M12 12h.01M18 12h.01"/></svg>',
+    good: '<svg viewBox="0 0 24 24"><path d="M5.5 12.5l4.2 4.2L18.5 8"/></svg>',
+    bad: '<svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 7L7 17"/></svg>',
+    hint: '<svg viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.6.6 1 1.5 1 2.5h6c0-1 .4-1.9 1-2.5A6 6 0 0 0 12 3z"/></svg>'
+  };
+  ICONS.done = ICONS.good;
+
   var game = new Chess();
   var view = new BoardView($('board'), { onMove: onUserMove, animationMs: 220 });
-  var T = null; // { entry, lines, side, idx, ply, mistakes, hints, timer, done }
-  var flashTimer = null;
+  var T = null; // { entry, lines, side, idx, ply, mistakes, hints, hintLevel, timer, done }
 
   function lineLabel(line, entry) {
     if (line.main) return 'Core moves';
-    var name = line.name;
-    if (name.indexOf(entry.name) === 0 && name.length > entry.name.length) name = name.slice(entry.name.length).replace(/^[:,]\s*/, '');
-    else if (name.indexOf(entry.family + ': ') === 0) name = name.slice(entry.family.length + 2);
-    return name;
+    if (line.name.indexOf(entry.name) === 0 && line.name.length > entry.name.length) {
+      return line.name.slice(entry.name.length).replace(/^[:,]\s*/, '');
+    }
+    if (line.family === entry.family && line.label) return line.label;
+    if (line.name.indexOf(entry.family + ': ') === 0) return line.name.slice(entry.family.length + 2);
+    return line.name;
   }
 
   function openTrainer(entry) {
     var lines = rep.linesFor(entry);
-    var side = store.side(entry.id) || Repertoire.defaultSide(entry);
+    var side = store.side(entry.id) || entry.side;
     T = { entry: entry, lines: lines, side: side, idx: 0, ply: 0, mistakes: 0, hints: 0, hintLevel: 0, timer: null, done: false };
     // Resume at the first line not learned yet.
     for (var i = 0; i < lines.length; i++) {
       if (store.lineStatus(lines[i].id, side) !== 'learned') { T.idx = i; break; }
     }
     $('t-eco').textContent = entry.eco;
+    $('t-tags').innerHTML = tagsHtml(entry).replace(/^<span class="tags">|<\/span>$/g, '');
     $('t-family').textContent = entry.family;
     $('t-variation').textContent = entry.variation || movesText(entry.moves);
     $('t-variation').classList.toggle('is-moves', !entry.variation);
+    renderSideButtons();
     renderChildren();
-    renderLines();
     startLine(T.idx);
   }
 
   function renderChildren() {
     var kids = rep.childrenOf(T.entry);
     $('children-block').hidden = kids.length === 0;
-    var box = $('children');
-    box.innerHTML = '';
-    kids.forEach(function (k) {
-      var a = document.createElement('a');
-      a.className = 'chip';
-      a.href = '#' + k.id;
-      a.textContent = lineLabel({ name: k.name }, T.entry);
-      a.title = movesText(k.moves);
-      box.appendChild(a);
-    });
+    $('children').innerHTML = kids.map(function (k) {
+      var label = lineLabel({ name: k.name, label: k.variation, family: k.family }, T.entry);
+      return '<a class="chip" href="#' + k.id + '" title="' + esc(movesText(k.moves)) + '">' + esc(label) + '</a>';
+    }).join('');
   }
 
   function renderLines() {
@@ -5717,12 +6448,14 @@ window.OPENINGS = [
       if (st === 'learned') learned++;
       var li = document.createElement('li');
       var b = document.createElement('button');
+      var label = lineLabel(line, T.entry);
       b.type = 'button';
       b.className = 'line' + (i === T.idx ? ' is-current' : '') + (st ? ' is-' + st : '');
       b.innerHTML = '<span class="line-dot" aria-hidden="true"></span><span class="line-name"></span><span class="line-end"></span>';
-      b.querySelector('.line-name').textContent = lineLabel(line, T.entry);
-      b.querySelector('.line-end').textContent = movesText(line.moves).split(' ').slice(-2).join(' ');
-      b.setAttribute('aria-label', lineLabel(line, T.entry) + (st ? ', ' + st : ''));
+      b.querySelector('.line-name').textContent = label;
+      b.querySelector('.line-end').textContent = plural(Math.ceil(line.moves.length / 2), 'move');
+      b.setAttribute('aria-label', label + (st ? ', ' + st : ''));
+      if (i === T.idx) b.setAttribute('aria-current', 'true');
       b.addEventListener('click', function () { startLine(i); });
       li.appendChild(b);
       list.appendChild(li);
@@ -5730,36 +6463,31 @@ window.OPENINGS = [
     $('progress-text').textContent = learned + ' of ' + T.lines.length + ' learned';
     $('progress-bar').style.width = (learned / T.lines.length * 100) + '%';
     var cur = list.children[T.idx];
-    if (cur && cur.scrollIntoView) {
-      var wrap = list;
+    if (cur) {
       var top = cur.offsetTop;
-      if (top < wrap.scrollTop || top > wrap.scrollTop + wrap.clientHeight - 40) wrap.scrollTop = top - 40;
+      if (top < list.scrollTop || top > list.scrollTop + list.clientHeight - 44) list.scrollTop = Math.max(0, top - 44);
     }
   }
 
   function setFeedback(kind, title, body) {
-    var fb = $('feedback');
-    fb.className = 'feedback' + (kind ? ' is-' + kind : '');
+    $('feedback').className = 'feedback is-' + kind;
+    var icon = $('fb-icon');
+    icon.className = 'fb-icon' + (kind === 'good' || kind === 'bad' || kind === 'done' ? ' pop' : '');
+    icon.innerHTML = ICONS[kind] || ICONS.turn;
     $('fb-title').textContent = title;
     $('fb-body').textContent = body || '';
   }
 
   function renderLineMoves() {
     var line = T.lines[T.idx];
-    var box = $('line-moves');
-    box.innerHTML = '';
+    var html = '';
     for (var i = 0; i < line.moves.length; i++) {
-      var span = document.createElement('span');
-      if (i % 2 === 0) {
-        var n = document.createElement('span');
-        n.className = 'lm-num';
-        n.textContent = (i / 2 + 1) + '.';
-        box.appendChild(n);
-      }
-      span.className = 'lm' + (i < T.ply ? ' is-played' : ' is-hidden') + (i === T.ply - 1 ? ' is-latest' : '');
-      span.textContent = i < T.ply || T.done ? line.moves[i] : '?';
-      box.appendChild(span);
+      if (i % 2 === 0) html += '<span class="lm-num">' + (i / 2 + 1) + '.</span>';
+      var shown = i < T.ply || T.done;
+      var cls = 'lm' + (shown ? '' : ' is-hidden') + (i === T.ply - 1 ? ' is-latest' : '') + (i === T.ply && !T.done ? ' is-next' : '');
+      html += '<span class="' + cls + '">' + (shown ? esc(line.moves[i]) : '&nbsp;') + '</span>';
     }
+    $('line-moves').innerHTML = html;
   }
 
   function syncBoard() {
@@ -5782,13 +6510,14 @@ window.OPENINGS = [
     game.reset();
     view.setOrientation(T.side);
     view.setMarks({});
+    view.clearBadges();
     syncBoard();
     renderLines();
     $('btn-next').disabled = T.idx >= T.lines.length - 1;
+    $('btn-next').classList.remove('is-ready');
+    $('btn-hint').disabled = false;
     step();
   }
-
-  function sideName(c) { return c === 'w' ? 'White' : 'Black'; }
 
   function step() {
     var line = T.lines[T.idx];
@@ -5813,13 +6542,7 @@ window.OPENINGS = [
     syncBoard();
   }
 
-  function flash(marks, ms) {
-    clearTimeout(flashTimer);
-    view.setMarks(marks);
-    flashTimer = setTimeout(function () { view.setMarks({}); }, ms || 700);
-  }
-
-  // Another line in this set that plays the same moves so far and then this move.
+  // Another opening that plays the same moves so far and then this move.
   function otherLineWith(san) {
     var line = T.lines[T.idx];
     var prefix = line.moves.slice(0, T.ply).join(' ');
@@ -5838,7 +6561,7 @@ window.OPENINGS = [
       for (var k = 0; k < played.length; k++) if (e.moves[k] !== played[k]) { ok = false; break; }
       if (ok) best = e;
     }
-    return best ? { name: best.name, outside: true } : null;
+    return best ? { name: best.name } : null;
   }
 
   function onUserMove(from, to, promotion) {
@@ -5846,10 +6569,12 @@ window.OPENINGS = [
     var line = T.lines[T.idx];
     var m = game.move({ from: from, to: to, promotion: promotion });
     if (!m) return false;
+    view.clearBadges();
     if (m.san === line.moves[T.ply]) {
       T.ply++;
-      var marks = {}; marks[to] = 'good';
-      flash(marks, 600);
+      store.touch(T.entry.id);
+      view.setMarks({});
+      view.flashBadge(to, 'good', 750);
       setFeedback('good', 'Correct', m.san + ' is the book move.');
       syncBoard();
       step();
@@ -5857,8 +6582,7 @@ window.OPENINGS = [
     }
     game.undo();
     T.mistakes++;
-    var marks2 = {}; marks2[to] = 'bad';
-    flash(marks2, 800);
+    view.flashBadge(to, 'bad', 950);
     var other = otherLineWith(m.san);
     if (other) {
       setFeedback('bad', m.san + ' is a different line',
@@ -5876,15 +6600,14 @@ window.OPENINGS = [
     var mv = game.moves({ verbose: true }).filter(function (m) { return m.san === san; })[0];
     if (!mv) return;
     T.hints++;
-    clearTimeout(flashTimer);
     var marks = {};
+    marks[mv.from] = 'hint';
     if (T.hintLevel === 0) {
-      marks[mv.from] = 'hint';
-      setFeedback('turn', 'Hint', 'Move the ' + OpenFilePieces.names[mv.piece] + ' on the highlighted square.');
+      setFeedback('hint', 'Hint', 'Move the ' + OpenFilePieces.names[mv.piece] + ' on the highlighted square.');
       T.hintLevel = 1;
     } else {
-      marks[mv.from] = 'hint'; marks[mv.to] = 'hint';
-      setFeedback('turn', 'Hint', 'The move is ' + san + '.');
+      marks[mv.to] = 'hint';
+      setFeedback('hint', 'Hint', 'The move is ' + san + '.');
       T.hintLevel = 2;
     }
     view.setMarks(marks);
@@ -5895,15 +6618,18 @@ window.OPENINGS = [
     var line = T.lines[T.idx];
     var clean = T.mistakes === 0 && T.hints === 0;
     store.setLineStatus(line.id, T.side, clean ? 'learned' : 'practiced');
+    store.touch(T.entry.id);
     var hasNext = T.idx < T.lines.length - 1;
     if (clean) {
       setFeedback('done', 'Line learned', 'No mistakes and no hints.' + (hasNext ? ' On to the next line.' : ' That was the last line here.'));
     } else {
       var parts = [];
-      if (T.mistakes) parts.push(T.mistakes + (T.mistakes === 1 ? ' mistake' : ' mistakes'));
-      if (T.hints) parts.push(T.hints + (T.hints === 1 ? ' hint' : ' hints'));
+      if (T.mistakes) parts.push(plural(T.mistakes, 'mistake'));
+      if (T.hints) parts.push(plural(T.hints, 'hint'));
       setFeedback('done', 'Line complete', 'You finished with ' + parts.join(' and ') + '. Restart it for a clean run to mark it learned.');
     }
+    $('btn-hint').disabled = true;
+    if (hasNext && clean) $('btn-next').classList.add('is-ready');
     syncBoard();
     renderLines();
   }
@@ -5946,16 +6672,17 @@ window.OPENINGS = [
     if (T) clearTimeout(T.timer);
     if (entry) {
       openTrainer(entry);
-      renderSideButtons();
       document.title = entry.name + ' · Open File';
       window.scrollTo(0, 0);
     } else {
       T = null;
       document.title = 'Open File Chess';
+      renderResults();
+      window.scrollTo(0, homeScroll);
     }
   }
 
-  renderHome();
+  setupHome();
   window.addEventListener('hashchange', route);
   route();
 

@@ -38,7 +38,21 @@
     return '<svg class="pc pc-' + color + '" viewBox="0 0 100 100" aria-hidden="true">' + SHAPES[type] + '</svg>';
   }
 
+  // One hidden copy of each piece that small diagrams reuse with <use href="#ofp-wk">.
+  function mountSprite(doc) {
+    if (doc.getElementById('ofp-sprite')) return;
+    var html = '';
+    ['w', 'b'].forEach(function (color) {
+      Object.keys(SHAPES).forEach(function (type) {
+        html += '<symbol id="ofp-' + color + type + '" class="ofp pc-' + color + '" viewBox="0 0 100 100">' + SHAPES[type] + '</symbol>';
+      });
+    });
+    var holder = doc.createElement('div');
+    holder.innerHTML = '<svg id="ofp-sprite" width="0" height="0" aria-hidden="true" style="position:absolute">' + html + '</svg>';
+    doc.body.appendChild(holder.firstChild);
+  }
+
   var NAMES = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
-  root.OpenFilePieces = { svg: pieceSvg, names: NAMES };
+  root.OpenFilePieces = { svg: pieceSvg, names: NAMES, mountSprite: mountSprite };
 })(typeof window !== 'undefined' ? window : globalThis);
