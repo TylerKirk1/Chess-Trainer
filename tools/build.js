@@ -1,6 +1,5 @@
-// Inlines CSS and JS into single-file pages: node tools/build.js
+// Inlines CSS and JS into a single-file page: node tools/build.js
 // dist/open-file.html   the opening trainer as one file you can double-click to open
-// dist/artifact.html    the same page as a fragment, for publishing as a claude.ai Artifact
 const fs = require('fs');
 const path = require('path');
 const root = path.resolve(__dirname, '..');
@@ -14,8 +13,6 @@ const js = ['data/openings.js', 'js/chess-engine.js', 'js/pieces.js', 'js/board.
 const head = `<title>Open File Chess</title>\n${fonts}\n<style>\n${css}</style>`;
 const scripts = `<script>\n${js}</script>`;
 fs.mkdirSync(path.join(root, 'dist'), { recursive: true });
-fs.writeFileSync(path.join(root, 'dist/artifact.html'),
-  `<title>Open File Chess</title>\n<meta name="claude:viewport-fit-sides" content="cover">\n${fonts}\n<style>\n${css}</style>\n${body}\n${scripts}\n`);
 fs.writeFileSync(path.join(root, 'dist/open-file.html'),
   `<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n${head}\n</head>\n<body>\n${body}\n${scripts}\n</body>\n</html>\n`);
-console.log('built dist/open-file.html and dist/artifact.html');
+console.log('built dist/open-file.html');
